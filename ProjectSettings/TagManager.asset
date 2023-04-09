@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Ball
+  - Paddle
+  - PaddleStops
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Paddle
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Background
+    uniqueID: 964686727
+    locked: 0
+  - name: Sparks
+    uniqueID: 200398033
+    locked: 0
+  - name: Ball
+    uniqueID: 1266634269
+    locked: 0
+  - name: Bricks
+    uniqueID: 3682021797
+    locked: 0
+  - name: BrickDestroyed
+    uniqueID: 1704866647
+    locked: 0
+  - name: Paddle
+    uniqueID: 179304493
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
