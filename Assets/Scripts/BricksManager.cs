@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BricksManager : MonoBehaviour
@@ -29,13 +30,13 @@ public class BricksManager : MonoBehaviour
 
     public string LevelTextFile = "Level_0001";
 
-    private int maximumRows = 12;
-    private int maximumColumns = 18;
+    private int maximumRows = 10;
+    private int maximumColumns = 17;
     private GameObject BrickManagerBrickList;
-    private float firstBrickX = -7.3f;
-    private float firstBrickY = 3.65f;
-    private float nextBrickSpacerX = .915f;
-    private float nextBrickSpacerY = .525f;
+    private float firstBrickX = -7.4f;
+    private float firstBrickY = 3.25f;
+    private float nextBrickSpacerX = .920f;
+    private float nextBrickSpacerY = .512f;
 
     public Brick brickPrefab;
 
@@ -51,7 +52,6 @@ public class BricksManager : MonoBehaviour
 
     private void Start()
     {
-        this.RemainingBricks = new List<Brick>();
         this.BrickManagerBrickList = new GameObject("BrickList");
         this.BrickLayout = this.LoadBrickLayout();
         this.LevelGeneration();
@@ -59,6 +59,7 @@ public class BricksManager : MonoBehaviour
 
     private void LevelGeneration()
     {
+        this.RemainingBricks = new List<Brick>();
         // This next line is for all levels in one text file loading the current level from a matrix
         int[,] currentLevelData = this.BrickLayout[this.CurrentLevel];
         //float currentSpawnX = firstBrickX;
@@ -91,6 +92,8 @@ public class BricksManager : MonoBehaviour
         }
 
         this.TotalBrickCount = this.RemainingBricks.Count;
+        GameManagerScript.Instance.TotalBricks = this.TotalBrickCount;
+        GameManagerScript.Instance.RemainingBricks = this.TotalBrickCount;
     }
 
     private List<int[,]> LoadBrickLayout()
@@ -124,5 +127,13 @@ public class BricksManager : MonoBehaviour
             }
         }
         return brickLayout;
+    }
+
+    private void EraseBricks()
+    {
+        foreach (Brick brick in this.RemainingBricks.ToList())
+        {
+            Destroy(brick.gameObject);
+        }
     }
 }

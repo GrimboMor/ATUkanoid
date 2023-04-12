@@ -35,6 +35,7 @@ public class PaddleScript : MonoBehaviour
     private SpriteRenderer spriteRend;
     private BoxCollider2D paddleCollider;
     private Coroutine sizeChangeCoroutine;
+    public AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +51,7 @@ public class PaddleScript : MonoBehaviour
     private void Update()
     {
         PaddleMovement();
+
         // Check for input and update the paddle size accordingly
         if (Input.GetKeyDown(KeyCode.Equals))
         {
@@ -67,24 +69,24 @@ public class PaddleScript : MonoBehaviour
 
     private void PaddleMovement()
     {
-        // Get the current paddle width in world units
+        // Get the current paddle width in pixels
         float halfPaddleWidth = spriteRend.size.x / 2;
 
-        // Calculate the viewport edges
+        // Calculate the screen edges
         Vector3 leftScreenEdge = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, 0));
         Vector3 rightScreenEdge = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
 
-        // Calculate the position of the paddle's edges in world coordinates
+        // Calculate the position of the paddle's edges in relation to the screen edges
         float leftEdge = leftScreenEdge.x + halfPaddleWidth;
         float rightEdge = rightScreenEdge.x - halfPaddleWidth;
 
-        // Get the mouse position in world coordinates
+        // Get the mouse position on the screen
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, 0, 0));
 
-        // Clamp the paddle position
+        // Clamp the paddle edges, so they can't go past the screen edgeds
         float clampedXPos = Mathf.Clamp(mouseWorldPos.x, leftEdge, rightEdge);
 
-        // Set the new position
+        // Update the paddle's position
         this.transform.position = new Vector3(clampedXPos, paddleYPos, 0);
     }
 
@@ -150,6 +152,9 @@ public class PaddleScript : MonoBehaviour
             float ballSpeed = BallsManagerScript.Instance.bmBallCurrentSpeed;
 
             ballRB.AddForce(direction * ballSpeed);
+
+            // Play the bounce sound
+            SoundEffectPlayer.Instance.Bounce();
         }
     }
 }

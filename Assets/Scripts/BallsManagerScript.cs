@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BallsManagerScript : MonoBehaviour
@@ -36,9 +37,9 @@ public class BallsManagerScript : MonoBehaviour
     public float bmBallStartSpeed = 400;
     public float bmBallCurrentSpeed = 400;
     public float bmBallMamimumSpeed = 700;
-    // These variables are for countiung the time elapsed and increasing the speed of the ball
-    private float timeElapsed = 0f;
-    private bool speedIncreased = false;
+    // This variable is needed to reference to the coroutine, so that I can stop / restart it
+    private Coroutine increaseBallSpeedCoroutine;
+
 
     //As there will be multiple balls (if I can get multiball powerup working) I need a list to manage them
     public List<BallScript> BallsList { get; set; }
@@ -51,7 +52,7 @@ public class BallsManagerScript : MonoBehaviour
     private void Update()
     {
         // First check if the game has started. If not, then stick the first ball to the paddles x position 
-        if (GameManagerScript.Instance.IsGameStarted!=true)
+        if (GameManagerScript.Instance.IsGameStarted != true)
         {
             Vector3 paddlePos = PaddleScript.Instance.gameObject.transform.position;
             Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + .34f, 0);
@@ -62,35 +63,39 @@ public class BallsManagerScript : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 firstBallRB.isKinematic = false;
-                firstBallRB.AddForce(new Vector2(5, bmBallStartSpeed));
+                bmBallCurrentSpeed = bmBallStartSpeed;
+                if (increaseBallSpeedCoroutine != null) // Stop any previous coroutine
+                {
+                    StopCoroutine(increaseBallSpeedCoroutine);
+                }
+                increaseBallSpeedCoroutine = StartCoroutine(IncreaseBallSpeed(bmBallCurrentSpeed, 0f));
+                firstBallRB.AddForce(new Vector2(5, bmBallCurrentSpeed));
                 GameManagerScript.Instance.IsGameStarted = true;
-            }
-        }
-        else
-        {
-            // Increase the ball's speed over 30 seconds
-            if (!speedIncreased)
-            {
-                IncreaseBallSpeed();
             }
         }
     }
 
-    private void IncreaseBallSpeed()
+    private IEnumerator IncreaseBallSpeed(float startSpeed, float resetTimeCount)
     {
-        timeElapsed += Time.deltaTime;
-        float t = Mathf.Clamp01(timeElapsed / 30f); // t varies between 0 and 1 over 30 seconds
-        bmBallCurrentSpeed = Mathf.Lerp(bmBallStartSpeed, bmBallMamimumSpeed, t); // increase the speed linearly
-        if (t >= 1f)
+        float elapsedTime = resetTimeCount;
+        float currentSpeed = startSpeed;
+
+        while (currentSpeed < bmBallMamimumSpeed)
         {
-            speedIncreased = true;
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / 30f;
+            currentSpeed = Mathf.Lerp(startSpeed, bmBallMamimumSpeed, t);
+            bmBallCurrentSpeed = currentSpeed;
+            yield return null;
         }
+
+        bmBallCurrentSpeed = bmBallMamimumSpeed;
     }
     private void InitialiseBall()
     {
         // The First ball will initialise on top of the paddle, so I need to get the position for that here
         Vector3 paddlePos = PaddleScript.Instance.gameObject.transform.position;
-        Vector3 startingPos = new Vector3(paddlePos.x, paddlePos.y + .34f,0);
+        Vector3 startingPos = new Vector3(paddlePos.x, paddlePos.y + .34f, 0);
         firstBall = Instantiate(ballPrefab, startingPos, Quaternion.identity);
         firstBallRB = firstBall.GetComponent<Rigidbody2D>();
 
@@ -98,5 +103,22 @@ public class BallsManagerScript : MonoBehaviour
         {
             firstBall
         };
+    }
+
+    public void BallReset()
+    {
+        // Stop the IncreaseBallSpeed coroutine before destroying the balls
+        if (increaseBallSpeedCoroutine != null)
+        {
+            StopCoroutine(increaseBallSpeedCoroutine);
+            increaseBallSpeedCoroutine = null;
+        }
+
+        //Make sure all previous balls objects are destoyed
+        foreach (var ball in this.BallsList.ToList())
+        {
+            Destroy(ball.gameObject);
+        }
+        InitialiseBall();
     }
 }

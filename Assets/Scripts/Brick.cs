@@ -26,18 +26,22 @@ public class Brick : MonoBehaviour
     private void ApplyCollisionFunction(BallScript ball)
     {
         this.BrickHealth--;
-
+        
         if (this.BrickHealth <= 0)
         {
-            //spawn particles + destryo brick
+            BricksManager.Instance.RemainingBricks.Remove(this);
+            GameManagerScript.Instance.RemainingBricks--;
+            //spawn particles + destroy brick
             OnBrickDestroyed?.Invoke(this);
             SpawnBrickDestroyed();
+            SoundEffectPlayer.Instance.BrickBreak();
             Destroy(this.gameObject);
-            //add score
+            //add score TODO
         }
         else
         {
             this.SR.sprite = BricksManager.Instance.Sprites[this.BrickHealth - 1];
+            SoundEffectPlayer.Instance.BrickHit();
             //add score
         }
     }
