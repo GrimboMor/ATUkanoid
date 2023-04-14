@@ -34,6 +34,7 @@ public class Brick : MonoBehaviour
             //spawn particles + destroy brick
             OnBrickDestroyed?.Invoke(this);
             SpawnBrickDestroyed();
+            SoundEffectPlayer.Instance.BrickHit();
             SoundEffectPlayer.Instance.BrickBreak();
             Destroy(this.gameObject);
             //add score TODO

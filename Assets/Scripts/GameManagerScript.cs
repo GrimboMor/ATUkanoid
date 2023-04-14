@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -37,10 +38,13 @@ public class GameManagerScript : MonoBehaviour
     public int StartingLives = 3;
     public int Lives { get; set; }
     private TextMeshProUGUI livesText;
+    private TextMeshProUGUI scoreText;
     private TextMeshProUGUI brickText;
+    private TextMeshProUGUI goBrickText;
 
     public int TotalBricks { get; set; }
     public int RemainingBricks { get; set; }
+    public int Score { get; set; }
 
     // Bool to see if the game is started
     public bool IsGameStarted { get; set; }
@@ -53,13 +57,17 @@ public class GameManagerScript : MonoBehaviour
         // Subscribe the OnBallDeath method to the BallScript.OnBallDeath event.
         // This allows the OnBallDeath method to be called when a ball dies.
         BallScript.OnBallDeath += OnBallDeath;
+        Score = 0;
         livesText = GameObject.Find("LivesText").GetComponent<TextMeshProUGUI>();
+        scoreText = GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
         brickText = GameObject.Find("BrickText").GetComponent<TextMeshProUGUI>();
     }
     void Update()
     {
         livesText.text = "LIVES: " + Lives;
         brickText.text = "BRICKS: " + RemainingBricks + " / " + TotalBricks;
+        scoreText.text = "SCORE: " + Score.ToString("D5");
+
         // Hide the cursor when the game is started
         if (IsGameStarted)
         {
@@ -84,6 +92,12 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
+    // Call this to update the score
+    public void ChangeScore(int value)
+    {
+        Score += value;
+    }
+
     public void Victory()
     {
         victoryScreen.SetActive(true);
@@ -105,8 +119,10 @@ public class GameManagerScript : MonoBehaviour
 
             if (this.Lives < 1)
             {
+                livesScore.SetActive(false);
                 gameOverScreen.SetActive(true);
                 IsGameStarted = false;
+                UpdateGameOverScreen();
             }
             else
             {
@@ -133,5 +149,11 @@ public class GameManagerScript : MonoBehaviour
         // Unsubscribe the OnBallDeath method from the BallScript.OnBallDeath event.
         // This prevents the OnBallDeath method from being called when a ball dies.
         BallScript.OnBallDeath -= OnBallDeath;
+    }
+
+    public void UpdateGameOverScreen()
+    {
+        goBrickText = GameObject.Find("GOBrickText").GetComponent<TextMeshProUGUI>();
+        goBrickText.text = "BRICKS: " + RemainingBricks + " / " + TotalBricks;
     }
 }
