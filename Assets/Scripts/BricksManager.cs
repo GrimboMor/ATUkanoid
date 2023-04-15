@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BricksManager : MonoBehaviour
 {
@@ -28,9 +30,12 @@ public class BricksManager : MonoBehaviour
 
     #endregion
 
+    // File used for level generation. The colour file will always be the level name with a C at the end of it
+    // so I set that as a private variable and update it in the start code block.
     public string LevelTextFile = "Level_0001";
+    private string LevelColorTextFile;
 
-    private int maximumRows = 10;
+    private int maximumRows = 11;
     private int maximumColumns = 17;
     private GameObject BrickManagerBrickList;
     private float firstBrickX = -7.4f;
@@ -46,22 +51,29 @@ public class BricksManager : MonoBehaviour
     public List<Brick> RemainingBricks { get; set; }
 
     public List<int[,]> BrickLayout { get; set; }
+    public List<int[,]> ColourLayout { get; set; }
     public int TotalBrickCount { get; set; }
 
     public int CurrentLevel;
 
     private void Start()
     {
+        LevelColorTextFile = LevelTextFile + "C";
         this.BrickManagerBrickList = new GameObject("BrickList");
-        this.BrickLayout = this.LoadBrickLayout();
+        this.BrickLayout = this.LoadBrickLayout(LevelTextFile);
+        this.ColourLayout = this.LoadBrickLayout(LevelColorTextFile);
         this.LevelGeneration();
     }
 
+    //Code to generate the brick layout by passing the level files to LoadBrickLayout and getting a 
+    //list of INTs back. First list "currentLevelData" is used for brick placement and brick health
+    //second list currentColourData is used for the brick colour data.
     private void LevelGeneration()
     {
         this.RemainingBricks = new List<Brick>();
         // This next line is for all levels in one text file loading the current level from a matrix
         int[,] currentLevelData = this.BrickLayout[this.CurrentLevel];
+        int[,] currentColourData = this.ColourLayout[this.CurrentLevel];
         //float currentSpawnX = firstBrickX;
         float currentSpawnY = firstBrickY;
         float zShifter = 0;
@@ -72,10 +84,11 @@ public class BricksManager : MonoBehaviour
             for (int col = 0; col < this.maximumColumns; col++)
             {
                 int brickType = currentLevelData[row, col];
+                int brickColour = currentColourData[row, col];
                 if (brickType > 0)
                 {
                     Brick newBrick = Instantiate(brickPrefab, new Vector3(currentSpawnX, currentSpawnY, 0.0f - zShifter), Quaternion.identity) as Brick;
-                    newBrick.Init(BrickManagerBrickList.transform, this.Sprites[brickType - 1], this.BrickColour[brickType], brickType);
+                    newBrick.Init(BrickManagerBrickList.transform, this.Sprites[brickType - 1], this.BrickColour[brickColour], brickType);
 
                     this.RemainingBricks.Add(newBrick);
                     zShifter += 0.0001f;
@@ -96,9 +109,9 @@ public class BricksManager : MonoBehaviour
         GameManagerScript.Instance.RemainingBricks = this.TotalBrickCount;
     }
 
-    private List<int[,]> LoadBrickLayout()
+    private List<int[,]> LoadBrickLayout(string TextFile)
     {
-        TextAsset text = Resources.Load(LevelTextFile) as TextAsset;
+        TextAsset text = Resources.Load(TextFile) as TextAsset;
         string[] rows = text.text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
         List<int[,]> brickLayout = new List<int[,]>();
@@ -129,6 +142,7 @@ public class BricksManager : MonoBehaviour
         return brickLayout;
     }
 
+    // This can be called to quickly remove all the bricks for testing
     private void EraseBricks()
     {
         foreach (Brick brick in this.RemainingBricks.ToList())

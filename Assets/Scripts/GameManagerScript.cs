@@ -39,7 +39,6 @@ public class GameManagerScript : MonoBehaviour
     public int Lives { get; set; }
     private TextMeshProUGUI livesText;
     private TextMeshProUGUI scoreText;
-    private TextMeshProUGUI brickText;
     private TextMeshProUGUI goBrickText;
 
     public int TotalBricks { get; set; }
@@ -49,23 +48,24 @@ public class GameManagerScript : MonoBehaviour
     // Bool to see if the game is started
     public bool IsGameStarted { get; set; }
 
-    // Setting the game resolution - this is static for this project
+ 
     private void Start()
     {
+        // Setting the starting lives
         this.Lives = this.StartingLives;
+        // Setting the game resolution - this is static for this project
         Screen.SetResolution(1920, 1080, false);
         // Subscribe the OnBallDeath method to the BallScript.OnBallDeath event.
         // This allows the OnBallDeath method to be called when a ball dies.
         BallScript.OnBallDeath += OnBallDeath;
+        // Resetting the score on level load / reload
         Score = 0;
-        livesText = GameObject.Find("LivesText").GetComponent<TextMeshProUGUI>();
-        scoreText = GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
-        brickText = GameObject.Find("BrickText").GetComponent<TextMeshProUGUI>();
+        livesText = GameObject.Find("UI-LivesText").GetComponent<TextMeshProUGUI>();
+        scoreText = GameObject.Find("UI-ScoreText").GetComponent<TextMeshProUGUI>();
     }
     void Update()
     {
         livesText.text = "LIVES: " + Lives;
-        brickText.text = "BRICKS: " + RemainingBricks + " / " + TotalBricks;
         scoreText.text = "SCORE: " + Score.ToString("D5");
 
         // Hide the cursor when the game is started
