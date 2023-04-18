@@ -155,6 +155,7 @@ public class PaddleScript : MonoBehaviour
 
             // Play the bounce sound
             SoundEffectPlayer.Instance.Bounce();
+            GameManagerScript.Instance.ChangeScore(5);
         }
     }
 }

@@ -2,13 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using static UnityEngine.ParticleSystem;
 
 public class Brick : MonoBehaviour
 {
     public int BrickHealth = 1;
+    public int BrickSprite = 4;
     public ParticleSystem BrickDestroyed;
     private SpriteRenderer SR;
+    private int ScoreToAdd = 10;
+    private int ScoreHitCount = 0;
 
     private void Awake()
     {
@@ -26,7 +30,9 @@ public class Brick : MonoBehaviour
     private void ApplyCollisionFunction(BallScript ball)
     {
         this.BrickHealth--;
-        
+        this.BrickSprite--;
+        this.ScoreHitCount++;
+
         if (this.BrickHealth <= 0)
         {
             BricksManager.Instance.RemainingBricks.Remove(this);
@@ -37,11 +43,11 @@ public class Brick : MonoBehaviour
             SoundEffectPlayer.Instance.BrickHit();
             SoundEffectPlayer.Instance.BrickBreak();
             Destroy(this.gameObject);
-            //add score TODO
+            AddScoreToGM(ScoreToAdd,ScoreHitCount);
         }
         else
         {
-            this.SR.sprite = BricksManager.Instance.Sprites[this.BrickHealth - 1];
+            this.SR.sprite = BricksManager.Instance.Sprites[this.BrickSprite - 1];
             SoundEffectPlayer.Instance.BrickHit();
             //add score
         }
@@ -58,11 +64,32 @@ public class Brick : MonoBehaviour
         Destroy(effect, BrickDestroyed.main.startLifetime.constant);
     }
 
-    public void Init(Transform containerTransform, Sprite sprite, Color colour, int health)
+    public void Init(Transform containerTransform, Sprite sprite, int spriteID, Color colour, int health)
     {
         this.transform.SetParent(containerTransform);
         this.SR.sprite = sprite;
         this.SR.color = colour;
         this.BrickHealth = health;
+        this.BrickSprite = spriteID;
      }
+
+    private void AddScoreToGM(int score, int hits)
+    {
+        int GameManScore;
+        if (hits == 1) 
+        {
+            GameManScore = ScoreToAdd;
+            GameManagerScript.Instance.ChangeScore(GameManScore);
+        }
+        else if (hits == 2)
+        {
+            GameManScore = ScoreToAdd*2;
+            GameManagerScript.Instance.ChangeScore(GameManScore);
+        }
+        else if (hits == 3)
+        {
+            GameManScore = ScoreToAdd * 5;
+            GameManagerScript.Instance.ChangeScore(GameManScore);
+        }
+    }
 }

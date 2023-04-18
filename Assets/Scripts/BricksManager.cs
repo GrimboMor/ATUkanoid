@@ -34,14 +34,15 @@ public class BricksManager : MonoBehaviour
     // so I set that as a private variable and update it in the start code block.
     public string LevelTextFile = "Level_0001";
     private string LevelColorTextFile;
+    private string LevelSpriteTextFile;
 
     private int maximumRows = 11;
     private int maximumColumns = 17;
     private GameObject BrickManagerBrickList;
-    private float firstBrickX = -7.4f;
+    private float firstBrickX = -7.57f;
     private float firstBrickY = 3.25f;
-    private float nextBrickSpacerX = .920f;
-    private float nextBrickSpacerY = .512f;
+    private float nextBrickSpacerX = 0.945f;
+    private float nextBrickSpacerY = 0.510f;
 
     public Brick brickPrefab;
 
@@ -52,16 +53,20 @@ public class BricksManager : MonoBehaviour
 
     public List<int[,]> BrickLayout { get; set; }
     public List<int[,]> ColourLayout { get; set; }
+
+    public List<int[,]> SpriteLayout { get; set; }
     public int TotalBrickCount { get; set; }
 
-    public int CurrentLevel;
+    private int CurrentLevel;
 
     private void Start()
     {
         LevelColorTextFile = LevelTextFile + "C";
+        LevelSpriteTextFile = LevelTextFile + "S";
         this.BrickManagerBrickList = new GameObject("BrickList");
         this.BrickLayout = this.LoadBrickLayout(LevelTextFile);
         this.ColourLayout = this.LoadBrickLayout(LevelColorTextFile);
+        this.SpriteLayout = this.LoadBrickLayout(LevelSpriteTextFile);
         this.LevelGeneration();
     }
 
@@ -74,6 +79,7 @@ public class BricksManager : MonoBehaviour
         // This next line is for all levels in one text file loading the current level from a matrix
         int[,] currentLevelData = this.BrickLayout[this.CurrentLevel];
         int[,] currentColourData = this.ColourLayout[this.CurrentLevel];
+        int[,] currentSpriteData = this.SpriteLayout[this.CurrentLevel];
         //float currentSpawnX = firstBrickX;
         float currentSpawnY = firstBrickY;
         float zShifter = 0;
@@ -85,13 +91,14 @@ public class BricksManager : MonoBehaviour
             {
                 int brickType = currentLevelData[row, col];
                 int brickColour = currentColourData[row, col];
+                int brickSprite = currentSpriteData[row, col];
                 if (brickType > 0)
                 {
                     Brick newBrick = Instantiate(brickPrefab, new Vector3(currentSpawnX, currentSpawnY, 0.0f - zShifter), Quaternion.identity) as Brick;
-                    newBrick.Init(BrickManagerBrickList.transform, this.Sprites[brickType - 1], this.BrickColour[brickColour], brickType);
+                    newBrick.Init(BrickManagerBrickList.transform, this.Sprites[brickSprite - 1], brickSprite, this.BrickColour[brickColour], brickType);
 
                     this.RemainingBricks.Add(newBrick);
-                    zShifter += 0.0001f;
+                    zShifter -= 0.0001f;
 
                     currentSpawnX += nextBrickSpacerX;
                 }
@@ -105,8 +112,9 @@ public class BricksManager : MonoBehaviour
         }
 
         this.TotalBrickCount = this.RemainingBricks.Count;
-        GameManagerScript.Instance.TotalBricks = this.TotalBrickCount;
-        GameManagerScript.Instance.RemainingBricks = this.TotalBrickCount;
+        //Set the GameManager Brick counts
+        GameManagerScript.Instance.TotalBricks = this.RemainingBricks.Count;
+        GameManagerScript.Instance.RemainingBricks = this.RemainingBricks.Count;
     }
 
     private List<int[,]> LoadBrickLayout(string TextFile)

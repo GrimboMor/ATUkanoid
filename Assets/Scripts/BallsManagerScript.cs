@@ -95,7 +95,7 @@ public class BallsManagerScript : MonoBehaviour
     {
         // The First ball will initialise on top of the paddle, so I need to get the position for that here
         Vector3 paddlePos = PaddleScript.Instance.gameObject.transform.position;
-        Vector3 startingPos = new Vector3(paddlePos.x, paddlePos.y + .34f, 0);
+        Vector3 startingPos = new Vector3(paddlePos.x, paddlePos.y + .1f, 0);
         firstBall = Instantiate(ballPrefab, startingPos, Quaternion.identity);
         firstBallRB = firstBall.GetComponent<Rigidbody2D>();
 

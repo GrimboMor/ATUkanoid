@@ -39,7 +39,8 @@ public class GameManagerScript : MonoBehaviour
     public int Lives { get; set; }
     private TextMeshProUGUI livesText;
     private TextMeshProUGUI scoreText;
-    private TextMeshProUGUI goBrickText;
+    private Text goScoreText;
+    private Text goBrickText;
 
     public int TotalBricks { get; set; }
     public int RemainingBricks { get; set; }
@@ -65,8 +66,8 @@ public class GameManagerScript : MonoBehaviour
     }
     void Update()
     {
-        livesText.text = "LIVES: " + Lives;
-        scoreText.text = "SCORE: " + Score.ToString("D5");
+        livesText.text = "LIVES : " + Lives;
+        scoreText.text = "SCORE : " + Score.ToString("D5");
 
         // Hide the cursor when the game is started
         if (IsGameStarted)
@@ -79,7 +80,7 @@ public class GameManagerScript : MonoBehaviour
         }
         if (Lives > 0)
         {
-            livesText.text = "LIVES: " + Lives;
+            livesText.text = "LIVES : " + Lives;
             livesScore.SetActive(true);
         }
         else
@@ -103,6 +104,10 @@ public class GameManagerScript : MonoBehaviour
         victoryScreen.SetActive(true);
         IsGameStarted = false;
         livesScore.SetActive(false);
+
+        GameObject VicScoreText = GameObject.Find("VicScoreText");
+        Text scoreText = VicScoreText.GetComponent<Text>();
+        scoreText.text = "SCORE : " + Score.ToString("D5");
     }
 
     public void RestartLevel()
@@ -153,7 +158,12 @@ public class GameManagerScript : MonoBehaviour
 
     public void UpdateGameOverScreen()
     {
-        goBrickText = GameObject.Find("GOBrickText").GetComponent<TextMeshProUGUI>();
-        goBrickText.text = "BRICKS: " + RemainingBricks + " / " + TotalBricks;
+        GameObject goScoreText = GameObject.Find("GOScoreText");
+        Text scoreText = goScoreText.GetComponent<Text>();
+        scoreText.text = "SCORE : " + Score.ToString("D5");
+
+        GameObject goBrickText = GameObject.Find("GOBrickText");
+        Text brickText = goBrickText.GetComponent<Text>();
+        brickText.text = "BRICKS : " + RemainingBricks + " / " + TotalBricks;
     }
 }

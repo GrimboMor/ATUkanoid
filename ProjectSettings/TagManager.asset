@@ -45,17 +45,17 @@ TagManager:
   - name: Background
     uniqueID: 964686727
     locked: 0
-  - name: Sparks
-    uniqueID: 200398033
-    locked: 0
-  - name: Ball
-    uniqueID: 1266634269
-    locked: 0
   - name: Bricks
     uniqueID: 3682021797
     locked: 0
   - name: BrickDestroyed
     uniqueID: 1704866647
+    locked: 0
+  - name: Sparks
+    uniqueID: 200398033
+    locked: 0
+  - name: Ball
+    uniqueID: 1266634269
     locked: 0
   - name: Paddle
     uniqueID: 179304493
