@@ -6,51 +6,31 @@ using static UnityEngine.ParticleSystem;
 
 public class BallScript : MonoBehaviour
 {
-    // Added to check the object is not null when called later in BallDeath method
-    public static event Action<BallScript> OnBallDeath;
-
     // Add Sparks when the ball pits the paddle
     public ParticleSystem Sparks;
 
-    // Get the Ball Speeds from the BallsManagerScript
-    private BallsManagerScript ballsManager; 
-
-    private void Start()
-    {
-        ballsManager = GameObject.FindObjectOfType<BallsManagerScript>();
-    }
-
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Paddle")
-        {
-            CreateSparks();
-        }
-        if (collision.gameObject.tag == "Wall")
-        {
-            SoundEffectPlayer.Instance.BrickHit();
-        }
+            //Debug.Log("Collision detected with: " + collision.gameObject.tag);
+            if (collision.gameObject.CompareTag("Paddle"))
+            {
+                CreateSparks();
+            }
+            if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Brick"))
+            {
+                SoundEffectPlayer.Instance.BrickHit();
+                //LogBallSpeed();
+            }
     }
 
-    // Original basic code to always creat sparks
-    /*private void CreateSparks()
-    {
-        Vector3 BallPos = gameObject.transform.position;
-        Vector3 SpawnPos = new Vector3(BallPos.x, BallPos.y - 0.3f, BallPos.z);
-        GameObject effect = Instantiate(Sparks.gameObject, SpawnPos, Quaternion.identity);
-        Destroy(effect, Sparks.main.startLifetime.constant);
-    }*/
-
-    //Updated code to create sparks based scaled in size to the ball speed
     private void CreateSparks()
     {
         Vector3 ballPos = gameObject.transform.position;
         Vector3 spawnPos = new Vector3(ballPos.x, ballPos.y - 0.25f, ballPos.z);
 
-        float ballStartSpeed = ballsManager.bmBallStartSpeed;
-        float ballCurrentSpeed = ballsManager.bmBallCurrentSpeed;
-        float ballMaxSpeed = ballsManager.bmBallMamimumSpeed;
+        float ballStartSpeed = BallsManagerScript.Instance.bmBallStartSpeed;
+        float ballCurrentSpeed = BallsManagerScript.Instance.bmBallCurrentSpeed;
+        float ballMaxSpeed = BallsManagerScript.Instance.bmBallMamimumSpeed;
 
         float sparksScale = Mathf.Lerp(0f, 0.7f, (ballCurrentSpeed - ballStartSpeed) / (ballMaxSpeed - ballStartSpeed));
 
@@ -62,11 +42,10 @@ public class BallScript : MonoBehaviour
         Destroy(effect, main.startLifetime.constant);
     }
 
-    public void BallDeath()
+    public void LogBallSpeed()
     {
-        //First check the ball object is not null, then destroy it
-        OnBallDeath?.Invoke(this);
-        Destroy(gameObject);
+        Rigidbody2D ballRigidbody = GetComponent<Rigidbody2D>();
+        float ballSpeed = ballRigidbody.velocity.magnitude;
+        Debug.Log("Ball Speed: " + ballSpeed);
     }
-
 }

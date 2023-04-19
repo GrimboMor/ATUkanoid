@@ -36,13 +36,13 @@ public class BricksManager : MonoBehaviour
     private string LevelColorTextFile;
     private string LevelSpriteTextFile;
 
-    private int maximumRows = 11;
-    private int maximumColumns = 17;
+    private int maximumRows = 12;
+    private int maximumColumns = 19;
     private GameObject BrickManagerBrickList;
-    private float firstBrickX = -7.57f;
-    private float firstBrickY = 3.25f;
-    private float nextBrickSpacerX = 0.945f;
-    private float nextBrickSpacerY = 0.510f;
+    private float firstBrickX = -7.38f;
+    private float firstBrickY = 3.35f;
+    private float nextBrickSpacerX = 0.815f;
+    private float nextBrickSpacerY = 0.473f;
 
     public Brick brickPrefab;
 

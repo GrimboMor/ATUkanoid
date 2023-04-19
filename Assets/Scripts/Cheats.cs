@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -26,6 +27,15 @@ public class Cheats : MonoBehaviour
         {
             GameManagerScript.Instance.Lives++;
             //GameManagerScript.Instance.UpdateLives();
+        }
+
+        //Press M to test MultiBalls
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            foreach (BallScript ball in BallsManagerScript.Instance.BallsList.ToList())
+            {
+                BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position, 2);
+            }
         }
     }
 }

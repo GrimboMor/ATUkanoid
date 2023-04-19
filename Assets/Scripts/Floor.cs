@@ -11,9 +11,12 @@ public class Floor : MonoBehaviour
         {
             SoundEffectPlayer.Instance.LoseBall();
             BallScript ball = collision.gameObject.GetComponent<BallScript>();
-            BallsManagerScript.Instance.BallsList.Remove(ball);
-            ball.BallDeath();
-
+            if (ball != null)
+            {
+                BallsManagerScript.Instance.BallsList.Remove(ball);
+                GameManagerScript.Instance.ActiveBalls = BallsManagerScript.Instance.BallsList.Count;
+                Destroy(ball.gameObject);
+            }
         }
     }
 }

@@ -36,20 +36,17 @@ public class Brick : MonoBehaviour
         if (this.BrickHealth <= 0)
         {
             BricksManager.Instance.RemainingBricks.Remove(this);
-            GameManagerScript.Instance.RemainingBricks--;
             //spawn particles + destroy brick
             OnBrickDestroyed?.Invoke(this);
             SpawnBrickDestroyed();
-            SoundEffectPlayer.Instance.BrickHit();
             SoundEffectPlayer.Instance.BrickBreak();
             Destroy(this.gameObject);
+            GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
             AddScoreToGM(ScoreToAdd,ScoreHitCount);
         }
         else
         {
             this.SR.sprite = BricksManager.Instance.Sprites[this.BrickSprite - 1];
-            SoundEffectPlayer.Instance.BrickHit();
-            //add score
         }
     }
 

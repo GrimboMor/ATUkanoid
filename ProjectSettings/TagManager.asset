@@ -8,6 +8,9 @@ TagManager:
   - Paddle
   - PaddleStops
   - Wall
+  - Floor
+  - Brick
+  - PowerUp
   layers:
   - Default
   - TransparentFX
@@ -15,10 +18,10 @@ TagManager:
   - 
   - Water
   - UI
-  - Paddle
-  - 
-  - 
-  - 
+  - Paddles
+  - Balls
+  - Bricks
+  - PowerUps
   - 
   - 
   - 
