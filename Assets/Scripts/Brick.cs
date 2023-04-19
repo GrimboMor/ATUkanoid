@@ -39,6 +39,7 @@ public class Brick : MonoBehaviour
             //spawn particles + destroy brick
             OnBrickDestroyed?.Invoke(this);
             SpawnBrickDestroyed();
+            SpawnPowerUp();
             SoundEffectPlayer.Instance.BrickBreak();
             Destroy(this.gameObject);
             GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
@@ -59,6 +60,63 @@ public class Brick : MonoBehaviour
         MainModule MM = effect.GetComponent<ParticleSystem>().main; 
         MM.startColor = this.SR.color;
         Destroy(effect, BrickDestroyed.main.startLifetime.constant);
+    }
+
+    private void SpawnPowerUp()
+    {
+        float powUpSpawnChance = UnityEngine.Random.Range(0, 100f);
+        float powDownSpawnChance = UnityEngine.Random.Range(0, 100f);
+        bool thisBrickAlreadySpawned = false;
+
+        if (powUpSpawnChance <= PowerUpsManager.Instance.PowUpChance)
+        {
+            thisBrickAlreadySpawned = true;
+            PowerUpBase newPowUp = this.SpawnPowerUp(true);
+            AddForceToPowerUp(newPowUp);
+        }
+
+        if (powDownSpawnChance <= PowerUpsManager.Instance.PowDownChance && !thisBrickAlreadySpawned)
+        {
+            PowerUpBase newPowDown = this.SpawnPowerUp(false);
+            AddForceToPowerUp(newPowDown);
+        }
+    }
+
+    private PowerUpBase SpawnPowerUp(bool powPow)
+    {
+        List<PowerUpBase> powType;
+
+        if (powPow)
+        {
+            powType = PowerUpsManager.Instance.AvailablePowerUps;
+        }
+        else
+        {
+            powType = PowerUpsManager.Instance.AvailablePowerDowns;
+        }
+
+        int powIndex = UnityEngine.Random.Range(0, powType.Count);
+        PowerUpBase prefab = powType[powIndex];
+        PowerUpBase newPowerUp = Instantiate(prefab, this.transform.position, Quaternion.identity) as PowerUpBase;
+        return newPowerUp;
+    }
+
+    private void AddForceToPowerUp(PowerUpBase powerUp)
+    {
+        // Making sure the Power-ups have a Rigidbody2D component.
+        Rigidbody2D rb = powerUp.GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            rb = powerUp.gameObject.AddComponent<Rigidbody2D>();
+        }
+
+        // Add a random direction (left or right) and an initial upwards bump.
+        float randomXForce = UnityEngine.Random.Range(-.45f, .45f);
+        Vector2 force = new Vector2(randomXForce, 2f).normalized * .75f; // Adjust the force multiplier (5f) as needed.
+        rb.AddForce(force, ForceMode2D.Impulse);
+
+        // Set the gravity scale so the power-up will fall down after the initial bump.
+        rb.gravityScale = 9;
     }
 
     public void Init(Transform containerTransform, Sprite sprite, int spriteID, Color colour, int health)

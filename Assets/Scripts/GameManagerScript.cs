@@ -68,16 +68,16 @@ public class GameManagerScript : MonoBehaviour
             {
                 LifeLost();
             }
-
-            if (RemainingBricks <= 0)
-            {
-                IsGameStarted = false;
-                UIManager.Instance.UIVictory();
-            }
         }
         else
         {
             Cursor.visible = true;
+        }
+
+        if (RemainingBricks <= 0)
+        {
+            IsGameStarted = false;
+            UIManager.Instance.UIVictory();
         }
     }
 
@@ -96,6 +96,7 @@ public class GameManagerScript : MonoBehaviour
             StartCoroutine(ResetBall());
             UIManager.Instance.UIValuesUpdate();
             UIManager.Instance.livesScore.SetActive(true);
+            PaddleScript.Instance.ChangePaddleSizeAnimated(2f);
         }
         else
         {
@@ -107,6 +108,24 @@ public class GameManagerScript : MonoBehaviour
     public void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private IEnumerator CheckRemainingBricksAndBalls()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(2f); // Wait for 2 seconds
+
+            // Check if there are remaining bricks and balls in the BallsList
+            bool hasRemainingBricks = BricksManager.Instance.RemainingBricks.Count > 0;
+            bool hasActiveBalls = BallsManagerScript.Instance.BallsList.Count > 0;
+
+            if (hasRemainingBricks && !hasActiveBalls)
+            {
+                // Trigger a lost life
+                LifeLost();
+            }
+        }
     }
 
     IEnumerator ResetBall()

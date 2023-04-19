@@ -51,20 +51,6 @@ public class PaddleScript : MonoBehaviour
     private void Update()
     {
         PaddleMovement();
-
-        // Check for input and update the paddle size accordingly
-        if (Input.GetKeyDown(KeyCode.Equals))
-        {
-            ChangePaddleSizeAnimated(3.6f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Minus))
-        {
-            ChangePaddleSizeAnimated(2f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            ChangePaddleSizeAnimated(1.2f);
-        }
     }
 
     private void PaddleMovement()

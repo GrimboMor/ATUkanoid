@@ -6,7 +6,7 @@ public class Multiball : PowerUpBase
     {
         foreach (BallScript ball in BallsManagerScript.Instance.BallsList.ToList())
         {
-            BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position,2);
+            BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position,1);
         }
     }    
 }

@@ -97,10 +97,11 @@ public class BallsManagerScript : MonoBehaviour
             currentSpeed = Mathf.Lerp(startSpeed, bmBallMamimumSpeed, t);
             bmBallCurrentSpeed = currentSpeed;
             yield return null;
+            
         }
 
         bmBallCurrentSpeed = bmBallMamimumSpeed;
-        AdjustBallSpeeds();
+        //AdjustBallSpeeds();
     }
     private void InitialiseBall()
     {

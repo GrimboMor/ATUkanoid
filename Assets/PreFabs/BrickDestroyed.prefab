@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2729356615354141319}
   m_Layer: 0
   m_Name: BrickDestroyed
-  m_TagString: Untagged
+  m_TagString: Particles
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
