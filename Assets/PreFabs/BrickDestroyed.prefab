@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8397313636643351750}
   - component: {fileID: 877380687099152153}
   - component: {fileID: 2729356615354141319}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BrickDestroyed
   m_TagString: Particles
   m_Icon: {fileID: 0}
@@ -4838,11 +4838,11 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1704866647
-  m_SortingLayer: -4
+  m_SortingLayer: -6
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
-  m_SortMode: 0
+  m_SortMode: 2
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
