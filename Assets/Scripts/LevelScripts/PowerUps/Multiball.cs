@@ -6,7 +6,7 @@ public class Multiball : PowerUpBase
     {
         foreach (BallScript ball in BallsManagerScript.Instance.BallsList.ToList())
         {
-            BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position, 2);
+            BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position, 2,ball.isALaserBall);
             GameManagerScript.Instance.Score = GameManagerScript.Instance.Score + (50 * GameManagerScript.Instance.ScoreMulti);
             SoundEffectPlayer.Instance.OneUp();
             //Track the Stats

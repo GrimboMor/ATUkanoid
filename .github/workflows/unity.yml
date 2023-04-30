@@ -1,0 +1,29 @@
+name: Unity Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Unity version
+      uses: game-ci/unity-setup@v2
+      with:
+        unity-version: '2021.3.19f1'
+
+    - name: Build project
+      uses: game-ci/unity-builder@v2
+      with:
+        targetPlatform: StandaloneWindows64
+        projectPath: .
+        buildsPath: ./Builds

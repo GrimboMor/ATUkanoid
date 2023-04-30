@@ -11,6 +11,7 @@ public class Brick : MonoBehaviour
     public int BrickSprite = 4;
     public ParticleSystem BrickDestroyed;
     private SpriteRenderer SR;
+    private BoxCollider2D box2D;
     private int ScoreToAdd = 5;
     private int ScoreHitCount = 0;
 
@@ -18,6 +19,24 @@ public class Brick : MonoBehaviour
     {
         //Get the colour for the brick and particles
         this.SR = this.GetComponent<SpriteRenderer>();
+        this.box2D = this.GetComponent<BoxCollider2D>();
+        BallScript.OnLaserBallSEnabled += OnLaserBallSEnabled;
+        BallScript.OnLaserBallSDisabled += OnLaserBallSDisabled;
+    }
+
+    private void OnLaserBallSEnabled(BallScript obj)
+    {
+        if (this != null)
+        {
+            this.box2D.isTrigger = true;
+        }
+    }
+    private void OnLaserBallSDisabled(BallScript obj)
+    {
+        if (this != null)
+        {
+            this.box2D.isTrigger = false;
+        }
     }
 
     public static event Action<Brick> OnBrickDestroyed;
@@ -25,6 +44,12 @@ public class Brick : MonoBehaviour
     {
         BallScript ball = collision.gameObject.GetComponent<BallScript>();
         ApplyCollisionFunction(ball);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        BallScript ball = collision.gameObject.GetComponent<BallScript>();
+        ApplyLaserCollisionFunction(ball);
     }
 
     private void ApplyCollisionFunction(BallScript ball)
@@ -43,7 +68,7 @@ public class Brick : MonoBehaviour
             SoundEffectPlayer.Instance.BrickBreak();
             Destroy(this.gameObject);
             GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
-            AddScoreToGM(ScoreToAdd,ScoreHitCount);
+            AddScoreToGM(ScoreToAdd, ScoreHitCount);
         }
         else
         {
@@ -51,13 +76,26 @@ public class Brick : MonoBehaviour
         }
     }
 
+    private void ApplyLaserCollisionFunction(BallScript ball)
+    {
+        this.BrickHealth = -10000;
+        BricksManager.Instance.RemainingBricks.Remove(this);
+        OnBrickDestroyed?.Invoke(this);
+        SpawnBrickDestroyed();
+        SpawnPowerUp();
+        SoundEffectPlayer.Instance.BrickBreak();
+        Destroy(this.gameObject);
+        GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
+        AddScoreToGM(ScoreToAdd, 2);
+    }
+
     private void SpawnBrickDestroyed()
     {
-        Vector3 BrickPos = gameObject.transform.position;   
+        Vector3 BrickPos = gameObject.transform.position;
         Vector3 SpawnPos = new Vector3(BrickPos.x, BrickPos.y, BrickPos.z);
         GameObject effect = Instantiate(BrickDestroyed.gameObject, SpawnPos, Quaternion.identity);
-    
-        MainModule MM = effect.GetComponent<ParticleSystem>().main; 
+
+        MainModule MM = effect.GetComponent<ParticleSystem>().main;
         MM.startColor = this.SR.color;
         Destroy(effect, BrickDestroyed.main.startLifetime.constant);
     }
@@ -110,15 +148,40 @@ public class Brick : MonoBehaviour
             rb = powerUp.gameObject.AddComponent<Rigidbody2D>();
         }
 
-        // Add a random direction (left or right) and an initial upwards bump.
-        float randomXForce = UnityEngine.Random.Range(-.45f, .45f);
-        Vector2 force = new Vector2(randomXForce, 2f).normalized * .75f; // Adjust the force multiplier (5f) as needed.
+        // Add a random direction (left or right) and an upwards bump.
+        float randomXForce = UnityEngine.Random.Range(-45f, 45f);
+        Vector2 force = new Vector2(randomXForce, 250f).normalized * .75f;
         rb.AddForce(force, ForceMode2D.Impulse);
 
-        // Set the gravity scale so the power-up will fall down after the initial bump.
-        rb.gravityScale = 9;
+        // Start a coroutine to gradually decrease the upward force.
+        StartCoroutine(ApplyGravity(rb, 1.1f));
     }
 
+    private IEnumerator ApplyGravity(Rigidbody2D rb, float duration)
+    {
+        float elapsedTime = 0;
+        float initialYForce = 1f;
+        float targetYForce = -100f;
+        float initialGravity = 1f;
+        float targetGravity = 1000f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // Calculate the new vertical force and gravity force.
+            float newYForce = Mathf.Lerp(initialYForce, targetYForce, elapsedTime / duration);
+            float newGravityForce = Mathf.Lerp(initialGravity, targetGravity, elapsedTime / duration);
+
+            // Apply the new vertical force.
+            rb.AddForce(new Vector2(0f, newYForce) * Time.deltaTime, ForceMode2D.Force);
+
+            // Apply the new gravity force.
+            rb.gravityScale = newGravityForce;
+
+            yield return null;
+        }
+    }
     public void Init(Transform containerTransform, Sprite sprite, int spriteID, Color colour, int health)
     {
         this.transform.SetParent(containerTransform);
@@ -126,19 +189,19 @@ public class Brick : MonoBehaviour
         this.SR.color = colour;
         this.BrickHealth = health;
         this.BrickSprite = spriteID;
-     }
+    }
 
     private void AddScoreToGM(int score, int hits)
     {
         int GameManScore;
-        if (hits == 1) 
+        if (hits == 1)
         {
             GameManScore = ScoreToAdd;
             GameManagerScript.Instance.ChangeScore(GameManScore);
         }
         else if (hits == 2)
         {
-            GameManScore = ScoreToAdd*2;
+            GameManScore = ScoreToAdd * 2;
             GameManagerScript.Instance.ChangeScore(GameManScore);
         }
         else if (hits == 3)

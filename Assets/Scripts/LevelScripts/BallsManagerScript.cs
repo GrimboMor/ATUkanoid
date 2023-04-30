@@ -44,6 +44,12 @@ public class BallsManagerScript : MonoBehaviour
     //As there will be multiple balls, I need a list to manage them
     public List<BallScript> BallsList { get; set; }
 
+    // Define the game area boundaries
+    private float minY = -5f;
+    private float maxY = 10f;
+    private float minX = -12f;
+    private float maxX = 12f;
+
     private void Start()
     {
         maxBalls = 12;
@@ -65,11 +71,21 @@ public class BallsManagerScript : MonoBehaviour
             //When the mouse is clicked, then the ball will be released and the game will start            
             if (Input.GetMouseButton(0))
             {
-                LaunchFirstBall();
+                //This check is needed to fix spawning non interactive balls during teh pause when a life is lost
+                if (GameManagerScript.Instance.canInteract)
+                {
+                    LaunchFirstBall();
+                }
             }
         }
 
         //CheckTimerDetails();
+
+        // Check if any ball is outside the game area
+        if (this.transform.position.y < minY || this.transform.position.y > maxY || this.transform.position.x < minX || this.transform.position.x > maxX)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void LaunchFirstBall()
@@ -102,6 +118,7 @@ public class BallsManagerScript : MonoBehaviour
         {
             firstBall
         };
+        firstBall.DestroyLaserBall();
         GMActiveBallsUpdate();
     }
 
@@ -182,16 +199,23 @@ public class BallsManagerScript : MonoBehaviour
         //Debug.Log("Active balls: " + BallsList.Count);
     }
 
-    public void MultiBalls(Vector3 position, int count)
+    public void MultiBalls(Vector3 position, int count, bool isLaser)
     {
         if (BallsList.Count < maxBalls)
         {
             for (int i = 0; i < count; i++)
             {
                 BallScript spawnedBall = Instantiate(ballPrefab, position, Quaternion.identity) as BallScript;
+                if (isLaser)
+                {
+                    spawnedBall.StartLaserBall();
+                }
                 Rigidbody2D spawnedBallRB = spawnedBall.GetComponent<Rigidbody2D>();
                 spawnedBallRB.isKinematic = false;
-                spawnedBallRB.AddForce(new Vector2(Random.Range(-180, 180), bmBallPaddleSpeed - (Random.Range(1, 2))));
+                float initialDirectionX = Random.Range(-180, 180);
+                float initialDirectionY = bmBallPaddleSpeed - Random.Range(1, 2);
+                spawnedBallRB.AddForce(new Vector2(initialDirectionX, initialDirectionY));
+
                 this.BallsList.Add(spawnedBall);
                 GMActiveBallsUpdate();
             }

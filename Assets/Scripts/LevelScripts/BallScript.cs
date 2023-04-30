@@ -8,37 +8,41 @@ public class BallScript : MonoBehaviour
 {
     // Add Sparks when the ball pits the paddle
     public ParticleSystem Sparks;
+    public bool isALaserBall;
+    public ParticleSystem LaserEffect;
+    public static event Action<BallScript> OnLaserBallSEnabled;
+    public static event Action<BallScript> OnLaserBallSDisabled;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-            //Debug.Log("Collision detected with: " + collision.gameObject.tag);
-            if (collision.gameObject.CompareTag("Paddle"))
+        //Debug.Log("Collision detected with: " + collision.gameObject.tag);
+        if (collision.gameObject.CompareTag("Paddle"))
+        {
+            CreateSparks();
+        }
+
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            BallsManagerScript.Instance.UpdateBallBounceSpeed();
+            BallsManagerScript.Instance.UpdateAllBallsSpeed();
+            SoundEffectPlayer.Instance.Bounce();
+        }
+
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Brick"))
+        {
+
+            if (!GameManagerScript.Instance.IsGameStarted)
             {
-                CreateSparks();
+                BallsManagerScript.Instance.LaunchFirstBall();
             }
 
-            if (collision.gameObject.CompareTag("Ball"))
-            {
-                BallsManagerScript.Instance.UpdateBallBounceSpeed();
-                BallsManagerScript.Instance.UpdateAllBallsSpeed();
-                SoundEffectPlayer.Instance.Bounce();
-            }
-
-            if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Brick"))
-            {
-                
-                if (!GameManagerScript.Instance.IsGameStarted)
-                {
-                    BallsManagerScript.Instance.LaunchFirstBall();
-                }
-
-                BallsManagerScript.Instance.UpdateBallBounceSpeed();
-                BallsManagerScript.Instance.UpdateAllBallsSpeed();
-                SoundEffectPlayer.Instance.BrickHit();
-                //UI Stat tracking
-                UIManager.Instance.StatTotalBallBounces = UIManager.Instance.StatTotalBallBounces + 1;
-                //LogBallSpeed();
-            }
+            BallsManagerScript.Instance.UpdateBallBounceSpeed();
+            BallsManagerScript.Instance.UpdateAllBallsSpeed();
+            SoundEffectPlayer.Instance.BrickHit();
+            //UI Stat tracking
+            UIManager.Instance.StatTotalBallBounces = UIManager.Instance.StatTotalBallBounces + 1;
+            //LogBallSpeed();
+        }
     }
 
     private void CreateSparks()
@@ -65,5 +69,21 @@ public class BallScript : MonoBehaviour
         Rigidbody2D ballRigidbody = GetComponent<Rigidbody2D>();
         float ballSpeed = ballRigidbody.velocity.magnitude;
         Debug.Log("Ball Speed: " + ballSpeed);
+    }
+
+    public void StartLaserBall()
+    {
+        if (!this.isALaserBall)
+        {
+            this.isALaserBall = true;
+            LaserEffect.gameObject.SetActive(true);
+
+            OnLaserBallSEnabled?.Invoke(this);
+        }
+    }
+
+    public void DestroyLaserBall()
+    {
+        OnLaserBallSDisabled?.Invoke(this);
     }
 }

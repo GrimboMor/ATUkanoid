@@ -50,7 +50,7 @@ public class PaddleScript : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        PaddleMovement();
+            PaddleMovement();
     }
 
     private void PaddleMovement()

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
+using System.IO;
 
 public class UIManager : MonoBehaviour
 {
@@ -55,6 +56,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        UIManager.Instance.livesScore.SetActive(true);
         livesText = GameObject.Find("UI-LivesText").GetComponent<TextMeshProUGUI>();
         scoreText = GameObject.Find("UI-ScoreText").GetComponent<TextMeshProUGUI>();
 
@@ -76,16 +78,25 @@ public class UIManager : MonoBehaviour
         UIManager.Instance.livesScore.SetActive(false);
         UIManager.Instance.multiScore.SetActive(false);
 
+        bool isNewHighScore = UpdateHighScore();
 
         GameObject VicScoreText = GameObject.Find("VicScoreText");
         Text scoreText = VicScoreText.GetComponent<Text>();
-        scoreText.text = "SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+        if (isNewHighScore)
+        {
+            scoreText.text = "NEW HIGH SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+        }
+        else
+        {
+            scoreText.text = "SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+        }
 
         UIValuesUpdate();
         GameObject goStatsText = GameObject.Find("VicStatsValues");
         Text statText = goStatsText.GetComponent<Text>();
         statText.text = " " + StatCollectPowUps + "\n" + StatScorePowUps + "\n" + StatCollectPowDown + "\n" + StatScorePowDown + "\n" + StatPadResized + "\n" + StatTotalBallBounces + "\n" + StatLivesLeft + "\n" + StatLivesBonus;
 
+        UpdateHighScore();
     }
 
     public void UIGameOver()
@@ -95,9 +106,18 @@ public class UIManager : MonoBehaviour
         UIManager.Instance.livesScore.SetActive(false);
         UIManager.Instance.multiScore.SetActive(false);
 
+        bool isNewHighScore = UpdateHighScore();
+
         GameObject goScoreText = GameObject.Find("GOScoreText");
         Text scoreText = goScoreText.GetComponent<Text>();
-        scoreText.text = "SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+        if (isNewHighScore)
+        {
+            scoreText.text = "NEW HIGH SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+        }
+        else
+        {
+            scoreText.text = "SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+        }
 
         GameObject goBrickText = GameObject.Find("GOBrickText");
         Text brickText = goBrickText.GetComponent<Text>();
@@ -107,6 +127,8 @@ public class UIManager : MonoBehaviour
         GameObject goStatsText = GameObject.Find("GOStatsValues");
         Text statText = goStatsText.GetComponent<Text>();
         statText.text = " " + StatCollectPowUps + "\n" + StatScorePowUps + "\n" + StatCollectPowDown + "\n" + StatScorePowDown + "\n" + StatPadResized + "\n" + StatTotalBallBounces;
+
+        UpdateHighScore();
     }
 
     public void UIValuesUpdate()
@@ -154,5 +176,38 @@ public class UIManager : MonoBehaviour
         {
             Destroy(particle);
         }
+    }
+
+    private bool UpdateHighScore()
+    {
+        bool isNewHighScore = false;
+        string levelToLoad = PlayerPrefs.GetString("LevelToLoad");
+        string jsonFilePath = Path.Combine(Application.persistentDataPath, levelToLoad + ".json");
+
+        if (File.Exists(jsonFilePath))
+        {
+            string jsonData = File.ReadAllText(jsonFilePath);
+            LevelData levelData = JsonUtility.FromJson<LevelData>(jsonData);
+
+            int currentScore = GameManagerScript.Instance.Score;
+
+            // Check if the current score is higher than the high score
+            if (currentScore > levelData.HighScore)
+            {
+                levelData.HighScore = currentScore;
+
+                // Save the updated high score back to the JSON file
+                string updatedJsonData = JsonUtility.ToJson(levelData);
+                File.WriteAllText(jsonFilePath, updatedJsonData);
+
+                isNewHighScore = true;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("JSON file not found for level: " + levelToLoad);
+        }
+
+        return isNewHighScore;
     }
 }

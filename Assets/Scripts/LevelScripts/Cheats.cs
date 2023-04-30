@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -33,6 +34,14 @@ public class Cheats : MonoBehaviour
             BallsManagerScript.Instance.SlowBalls();    
         }
 
+        //Press H to Clear Scores
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //GameManagerScript.Instance.RestartLevel();
+            ClearHighScore();
+        }
+
 
 
         if (CheatsEnabled == true)
@@ -62,11 +71,20 @@ public class Cheats : MonoBehaviour
             {
                 foreach (BallScript ball in BallsManagerScript.Instance.BallsList.ToList())
                 {
-                    BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position, 2);
+                    BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position, 2, ball.isALaserBall);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.M))
+            //Press M to test MultiBalls
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                foreach (BallScript ball in BallsManagerScript.Instance.BallsList.ToList())
+                {
+                    ball.StartLaserBall();
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
             {
                 //Debug.Log("Current Multi: " + GameManagerScript.Instance.ScoreMulti);
                 UIManager.Instance.StatCollectPowUps = UIManager.Instance.StatCollectPowUps + 1;
@@ -81,6 +99,28 @@ public class Cheats : MonoBehaviour
                 //Debug.Log("Current Multi: " + GameManagerScript.Instance.ScoreMulti);
                 GameManagerScript.Instance.UpdateScoreMultiplierText();
             }
+        }
+    }
+
+    private void ClearHighScore()
+    {
+        string levelToLoad = PlayerPrefs.GetString("LevelToLoad");
+        string jsonFilePath = Path.Combine(Application.persistentDataPath, levelToLoad + ".json");
+
+        if (File.Exists(jsonFilePath))
+        {
+            string jsonData = File.ReadAllText(jsonFilePath);
+            LevelData levelData = JsonUtility.FromJson<LevelData>(jsonData);
+
+            levelData.HighScore = 0;
+
+            // Save the updated high score back to the JSON file
+            string updatedJsonData = JsonUtility.ToJson(levelData);
+            File.WriteAllText(jsonFilePath, updatedJsonData);
+        }
+        else
+        {
+            Debug.LogWarning("JSON file not found for level: " + levelToLoad);
         }
     }
 }

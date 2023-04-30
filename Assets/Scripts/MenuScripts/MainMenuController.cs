@@ -11,10 +11,11 @@ public class MainMenuController : MonoBehaviour
 
     public Toggle fullscreenToggle;
 
-    public void LoadLevel(int levelIndex)
+    public void ButtonLevelSelect()
     {
-        SaveLevelToLoad(levelIndex);
-        SceneManager.LoadScene(1);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("LevelSelect");
     }
 
     public void QuitGame()
@@ -33,6 +34,19 @@ public class MainMenuController : MonoBehaviour
         Screen.SetResolution(1920, 1080, !isWindowed);
     }
 
+    private void Start()
+    {
+        // Set the toggle's initial value based on the PlayerPrefs value
+        fullscreenToggle.isOn = PlayerPrefs.GetInt(WindowedPrefKey, 0) == 0;
+    }
+
+    // All this code to move to the level select Grid
+    public void LoadLevel(int levelIndex)
+    {
+        LevelToLoad(levelIndex);
+        SceneManager.LoadScene(1);
+    }
+
     private List<string> LoadLevelNames()
     {
         TextAsset text = Resources.Load("LevelList") as TextAsset;
@@ -49,7 +63,7 @@ public class MainMenuController : MonoBehaviour
         return null;
     }
 
-    public void SaveLevelToLoad(int levelIndex)
+    public void LevelToLoad(int levelIndex)
     {
         string levelName = GetLevelName(levelIndex);
         if (!string.IsNullOrEmpty(levelName))
@@ -57,11 +71,5 @@ public class MainMenuController : MonoBehaviour
             PlayerPrefs.SetString("LevelToLoad", levelName);
             PlayerPrefs.Save();
         }
-    }
-
-    private void Start()
-    {
-        // Set the toggle's initial value based on the PlayerPrefs value
-        fullscreenToggle.isOn = PlayerPrefs.GetInt(WindowedPrefKey, 0) == 0;
     }
 }

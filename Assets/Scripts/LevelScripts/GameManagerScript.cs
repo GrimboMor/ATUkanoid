@@ -48,6 +48,8 @@ public class GameManagerScript : MonoBehaviour
 
     private const string WindowedPrefKey = "Windowed";
 
+    public bool canInteract = true;
+
 
     private void Start()
     {
@@ -138,6 +140,7 @@ public class GameManagerScript : MonoBehaviour
 
         if (Lives > 0)
         {
+            canInteract = false;
             StartCoroutine(ResetBall());
             UIManager.Instance.UIValuesUpdate();
             UIManager.Instance.livesScore.SetActive(true);
@@ -167,8 +170,10 @@ public class GameManagerScript : MonoBehaviour
         // Reset the starting ball
         BallsManagerScript.Instance.BallReset();
 
-        // Set the isLifeLostInProgress flag to false after the coroutine is completed
+        // Set the isLifeLostInProgress flag to false to stop a bug where lives were continually lost
         isLifeLostInProgress = false;
+        // Set interactable to fix a bug with clicking too early and spawning a non interactive ball
+        canInteract = true;
     }
 
     public void ToggleWindowedMode()
@@ -185,6 +190,13 @@ public class GameManagerScript : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        SceneManager.LoadScene("MainMenu"); // Replace "MainMenu" with the exact name of your main menu scene.
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ReturnToLevelSelect()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("LevelSelect");
     }
 }
