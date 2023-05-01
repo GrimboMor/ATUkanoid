@@ -68,6 +68,8 @@ public class GridLoader : MonoBehaviour
             LevelLoaderPrefab levelLoaderPrefab = levelCell.GetComponent<LevelLoaderPrefab>();
             levelLoaderPrefab.Setup(levelName);
         }
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
 

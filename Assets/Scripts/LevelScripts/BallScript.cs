@@ -25,7 +25,7 @@ public class BallScript : MonoBehaviour
         {
             BallsManagerScript.Instance.UpdateBallBounceSpeed();
             BallsManagerScript.Instance.UpdateAllBallsSpeed();
-            SoundEffectPlayer.Instance.Bounce();
+            SoundEffectPlayer.Instance.BallHitBall();
         }
 
         if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Brick"))

@@ -37,13 +37,13 @@ using UnityEngine.UIElements;
         private string LevelColorTextFile;
         private string LevelSpriteTextFile;
 
-        private int maximumRows = 12;
-        private int maximumColumns = 19;
+        private int maximumRows = 17;
+        private int maximumColumns = 33;
         private GameObject BrickManagerBrickList;
-        private float firstBrickX = -7.38f;
-        private float firstBrickY = 3.35f;
-        private float nextBrickSpacerX = 0.815f;
-        private float nextBrickSpacerY = 0.473f;
+        public float firstBrickX = -7.85f;
+        public float firstBrickY = 3.35f;
+        public float nextBrickSpacerX = 0.49f;
+        public float nextBrickSpacerY = 0.33f;
 
         public Brick brickPrefab;
 
@@ -172,7 +172,7 @@ using UnityEngine.UIElements;
             if (!pngExists)
             {
                 float screenAspectRatio = (float)Screen.width / (float)Screen.height;
-                float cropWidthPercent = 0.878f;
+                float cropWidthPercent = 0.92f;
                 float cropHeightPercent = 0.62f;
                 float cropXPercent = (1 - cropWidthPercent) / 2.0f;
                 float cropYPercent = (1 - cropHeightPercent + 0.15f) / 2.0f; // Move crop area up by 15%

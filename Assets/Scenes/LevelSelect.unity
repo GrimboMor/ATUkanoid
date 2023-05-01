@@ -216,7 +216,7 @@ MonoBehaviour:
   levelCellPrefab: {fileID: 8432713478154309899, guid: 8957508209591c74aa73c8457bd7abef, type: 3}
   gridTransform: {fileID: 380492514}
   startLevelNumb: 1
-  endLevelNumb: 2
+  endLevelNumb: 5
 --- !u!114 &380492519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,13 +232,13 @@ MonoBehaviour:
   m_Padding:
     m_Left: 60
     m_Right: 0
-    m_Top: 50
+    m_Top: 25
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 300, y: 260}
-  m_Spacing: {x: 50, y: 50}
+  m_Spacing: {x: 50, y: 25}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &579408726
