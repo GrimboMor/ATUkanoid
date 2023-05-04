@@ -61,11 +61,11 @@ TagManager:
   - name: Ball
     uniqueID: 1266634269
     locked: 0
-  - name: PowerUps
-    uniqueID: 4095373377
-    locked: 0
   - name: Fog
     uniqueID: 4172239617
+    locked: 0
+  - name: PowerUps
+    uniqueID: 4095373377
     locked: 0
   - name: Paddle
     uniqueID: 179304493
