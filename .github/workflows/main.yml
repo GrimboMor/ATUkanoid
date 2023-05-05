@@ -1,15 +1,16 @@
-name: GameCI Template 🎮
+name: ATUkanoid Game-CI Tests 🎮
 
-on: push
-
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+on:
+  pull_request: {}
+  push: { branches: [main] }
 
 jobs:
-  TestActivationWorking:
+  testActivationConfiguration:
     name: Test Activation is setup correctly 
     runs-on: ubuntu-latest
     steps:
       - name: Unity - Activate
         uses: game-ci/unity-activate@v2.0.0
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
