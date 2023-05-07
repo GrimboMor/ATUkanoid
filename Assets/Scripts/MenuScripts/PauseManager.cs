@@ -69,6 +69,7 @@ public class PauseManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        Time.timeScale = 1;
         SceneManager.LoadScene("LevelSelect");
     }
 
@@ -82,6 +83,7 @@ public class PauseManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -102,6 +104,7 @@ public class PauseManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

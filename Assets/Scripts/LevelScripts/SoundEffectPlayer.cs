@@ -26,7 +26,7 @@ public class SoundEffectPlayer : MonoBehaviour
     #endregion
 
     public AudioSource AudSrc;
-    public AudioClip sfxBounce, sfxBrickHit, sfxBrickBreak, sfxLoseBall, sfxVictory, sfxGameOver, sfxOneUp, sfxShrink,sfxGrow,sfxBallHit;
+    public AudioClip sfxBounce, sfxBrickHit, sfxBrickBreak, sfxLoseBall, sfxVictory, sfxGameOver, sfxOneUp, sfxShrink,sfxGrow,sfxBallHit, sfxExplode, sfxBrickExplode;
 
     public void Bounce()
     {
@@ -77,6 +77,17 @@ public class SoundEffectPlayer : MonoBehaviour
     public void BallHitBall()
     {
         AudSrc.clip = sfxBallHit;
+        AudSrc.Play();
+    }
+    public void BrickExplode()
+    {
+        AudSrc.clip = sfxExplode;
+        AudSrc.Play();
+    }
+
+    public void BrickExplode2()
+    {
+        AudSrc.clip = sfxBrickExplode;
         AudSrc.Play();
     }
 }

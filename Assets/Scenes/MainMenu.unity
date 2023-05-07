@@ -391,7 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abe3f27c43414f4409a3584b068847cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fullscreenToggle: {fileID: 0}
+  fullscreenToggle: {fileID: 647171371}
 --- !u!4 &224839604
 Transform:
   m_ObjectHideFlags: 0

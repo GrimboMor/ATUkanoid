@@ -40,8 +40,17 @@ public class MainMenuController : MonoBehaviour
         fullscreenToggle.isOn = PlayerPrefs.GetInt(WindowedPrefKey, 0) == 0;
     }
 
-    // All this code to move to the level select Grid
-    public void LoadLevel(int levelIndex)
+    private void Update()
+    {
+      if (Cursor.visible == false)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
+        // All this code to move to the level select Grid
+        public void LoadLevel(int levelIndex)
     {
         LevelToLoad(levelIndex);
         SceneManager.LoadScene(1);

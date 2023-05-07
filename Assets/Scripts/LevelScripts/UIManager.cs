@@ -74,6 +74,7 @@ public class UIManager : MonoBehaviour
     {
         BallsManagerScript.Instance.DestroyAllBalls();
         ClearScreen();
+        FadePanelAnimation.Instance.ResetFadePanel();
         UIManager.Instance.victoryScreen.SetActive(true);
         UIManager.Instance.livesScore.SetActive(false);
         UIManager.Instance.multiScore.SetActive(false);
@@ -102,6 +103,7 @@ public class UIManager : MonoBehaviour
     public void UIGameOver()
     {
         ClearScreen();
+        FadePanelAnimation.Instance.ResetFadePanel();
         UIManager.Instance.gameOverScreen.SetActive(true);
         UIManager.Instance.livesScore.SetActive(false);
         UIManager.Instance.multiScore.SetActive(false);

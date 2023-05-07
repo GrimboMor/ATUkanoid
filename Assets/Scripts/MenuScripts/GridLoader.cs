@@ -71,6 +71,22 @@ public class GridLoader : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+          /*  foreach (string levelName in levels)
+            {
+                string filePath = Path.Combine(Application.persistentDataPath, levelName + ".json");
+                LevelData levelData
+                {
+                    HighScore = 0;
+                    TimesPlayed = 0;
+                }
+            }*/
+        }
+    }
 }
 
 [System.Serializable]

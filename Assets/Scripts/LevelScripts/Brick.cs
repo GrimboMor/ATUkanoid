@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using static UnityEngine.ParticleSystem;
@@ -10,10 +11,12 @@ public class Brick : MonoBehaviour
     public int BrickHealth = 1;
     public int BrickSprite = 4;
     public ParticleSystem BrickDestroyed;
+    public GameObject bickExplodePrefab;
     private SpriteRenderer SR;
     private BoxCollider2D box2D;
     private int ScoreToAdd = 5;
     private int ScoreHitCount = 0;
+
 
     private void Awake()
     {
@@ -54,6 +57,12 @@ public class Brick : MonoBehaviour
 
     private void ApplyCollisionFunction(BallScript ball)
     {
+        if (GameManagerScript.Instance.explodingBricks && UnityEngine.Random.value < 0.5f)
+        {
+            BrickExplodes(this, true);
+            return;
+        }
+
         this.BrickHealth--;
         this.BrickSprite--;
         this.ScoreHitCount++;
@@ -78,12 +87,18 @@ public class Brick : MonoBehaviour
 
     private void ApplyLaserCollisionFunction(BallScript ball)
     {
+        if (GameManagerScript.Instance.explodingBricks && UnityEngine.Random.value < 0.5f)
+        {
+            BrickExplodes(this);
+            return;
+        }
+
         this.BrickHealth = -10000;
         BricksManager.Instance.RemainingBricks.Remove(this);
         OnBrickDestroyed?.Invoke(this);
         SpawnBrickDestroyed();
         SpawnPowerUp();
-        SoundEffectPlayer.Instance.BrickBreak();
+        SoundEffectPlayer.Instance.BrickExplode();
         Destroy(this.gameObject);
         GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
         AddScoreToGM(ScoreToAdd, 2);
@@ -98,6 +113,40 @@ public class Brick : MonoBehaviour
         MainModule MM = effect.GetComponent<ParticleSystem>().main;
         MM.startColor = this.SR.color;
         Destroy(effect, BrickDestroyed.main.startLifetime.constant);
+    }
+
+    private void BrickExplodes(Brick brick, bool isFirstCall = true)
+    {
+        BricksManager.Instance.RemainingBricks.Remove(brick);
+        //spawn particles + destroy brick
+        OnBrickDestroyed?.Invoke(brick);
+        SpawnBrickDestroyed();
+        SpawnBrickExplode(brick);
+        SpawnPowerUp();
+        SoundEffectPlayer.Instance.BrickExplode2();
+        Destroy(brick.gameObject);
+        GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
+        AddScoreToGM(ScoreToAdd, ScoreHitCount);
+
+        if (isFirstCall)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(brick.transform.position, .3f);
+            foreach (Collider2D collider in colliders)
+            {
+                Brick otherBrick = collider.gameObject.GetComponent<Brick>();
+                if (otherBrick != null && otherBrick != brick && UnityEngine.Random.value < .25f)
+                {
+                    BrickExplodes(otherBrick, false);
+                }
+            }
+        }
+    }
+    private void SpawnBrickExplode(Brick brick)
+    {
+        Vector3 brickPos = brick.transform.position;
+        Vector3 spawnPos = new Vector3(brickPos.x, brickPos.y, brickPos.z);
+        GameObject effectObject = Instantiate(bickExplodePrefab.gameObject, spawnPos, Quaternion.identity);
+        Destroy(effectObject, 0.85f);
     }
 
     private void SpawnPowerUp()

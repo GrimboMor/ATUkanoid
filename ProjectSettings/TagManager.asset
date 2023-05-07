@@ -67,6 +67,9 @@ TagManager:
   - name: PowerUps
     uniqueID: 4095373377
     locked: 0
+  - name: Walls
+    uniqueID: 4151339211
+    locked: 0
   - name: Paddle
     uniqueID: 179304493
     locked: 0
@@ -75,7 +78,4 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 2439862031
-    locked: 0
-  - name: Walls
-    uniqueID: 4151339211
     locked: 0

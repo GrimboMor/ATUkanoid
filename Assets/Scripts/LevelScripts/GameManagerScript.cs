@@ -50,6 +50,10 @@ public class GameManagerScript : MonoBehaviour
 
     public bool canInteract = true;
 
+    public Animator fadeInPanelAnimator;
+
+    public bool explodingBricks = false;
+
 
     private void Start()
     {
@@ -62,6 +66,7 @@ public class GameManagerScript : MonoBehaviour
         Score = 0;
         ScoreMulti = 4;
         IsGameOver = false;
+        fadeInPanelAnimator.SetTrigger("FadeInPanel");
     }
     void Update()
     {
@@ -146,6 +151,7 @@ public class GameManagerScript : MonoBehaviour
             UIManager.Instance.livesScore.SetActive(true);
             PaddleScript.Instance.ChangePaddleSizeAnimated(2f);
             ScoreMulti = 4;
+            explodingBricks = false;
             UpdateScoreMultiplierText();
         }
         else
