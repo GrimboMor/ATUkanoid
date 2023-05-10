@@ -13,4 +13,38 @@ jobs:
         uses: game-ci/unity-activate@v2.0.0
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Unity
+      uses: game-ci/setup-unity@v1
+      with:
+        unity-version: 2021.3.19f1
+    - name: Cache Unity
+      uses: actions/cache@v2
+      with:
+        path: Library
+        key: ${{ runner.os }}-unity-${{ hashFiles('**/ProjectSettings/ProjectVersion.txt') }}-${{ hashFiles('**/*.cs') }}
+        restore-keys: |
+          ${{ runner.os }}-unity-${{ hashFiles('**/ProjectSettings/ProjectVersion.txt') }}-
+          ${{ runner.os }}-unity-
+    - name: Run Tests
+      run: |
+        /opt/Unity/Editor/Unity \
+          -batchmode \
+          -nographics \
+          -silent-crashes \
+          -logFile $(pwd)/unity.log \
+          -projectPath $(pwd) \
+          -runTests \
+          -testPlatform playmode \
+          -testResults $(pwd)/testResults.xml \
+          -testNameFilter "GameManagerTests"
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: $(pwd)/testResults.xml
 

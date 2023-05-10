@@ -55,7 +55,7 @@ public class GameManagerScript : MonoBehaviour
     public bool explodingBricks = false;
 
 
-    private void Start()
+    public void Start()
     {
         // Setting the starting lives
         this.Lives = this.StartingLives;
