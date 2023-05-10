@@ -4,12 +4,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using System.Collections;
 
 public class MainMenuController : MonoBehaviour
 {
     private const string WindowedPrefKey = "Windowed";
 
     public Toggle fullscreenToggle;
+
+    public GameObject BackGround;
+    private float fadeTime = 0.25f; 
+    private Image backgroundImage;
+
 
     public void ButtonLevelSelect()
     {
@@ -38,6 +44,8 @@ public class MainMenuController : MonoBehaviour
     {
         // Set the toggle's initial value based on the PlayerPrefs value
         fullscreenToggle.isOn = PlayerPrefs.GetInt(WindowedPrefKey, 0) == 0;
+        backgroundImage = BackGround.GetComponent<Image>();
+        StartCoroutine(FadeBackground());
     }
 
     private void Update()
@@ -47,38 +55,23 @@ public class MainMenuController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+
     }
 
-        // All this code to move to the level select Grid
-        public void LoadLevel(int levelIndex)
+    private IEnumerator FadeBackground()
     {
-        LevelToLoad(levelIndex);
-        SceneManager.LoadScene(1);
-    }
+        float elapsedTime = 0f;
+        Color startColor = new Color(0f, 0f, 0f, 1f);
+        Color endColor = new Color(1f, 1f, 1f, 1f);
 
-    private List<string> LoadLevelNames()
-    {
-        TextAsset text = Resources.Load("LevelList") as TextAsset;
-        return text.text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-    }
-
-    public string GetLevelName(int index)
-    {
-        List<string> levelNames = LoadLevelNames();
-        if (index >= 0 && index < levelNames.Count)
+        while (elapsedTime < fadeTime)
         {
-            return levelNames[index];
+            float t = elapsedTime / fadeTime;
+            backgroundImage.color = Color.Lerp(startColor, endColor, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
-        return null;
-    }
 
-    public void LevelToLoad(int levelIndex)
-    {
-        string levelName = GetLevelName(levelIndex);
-        if (!string.IsNullOrEmpty(levelName))
-        {
-            PlayerPrefs.SetString("LevelToLoad", levelName);
-            PlayerPrefs.Save();
-        }
+        backgroundImage.color = endColor;
     }
 }

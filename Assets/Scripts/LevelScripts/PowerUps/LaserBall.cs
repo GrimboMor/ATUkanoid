@@ -13,6 +13,7 @@ public class LaserBall : PowerUpBase
             ball.StartLaserBall();
         }
 
+        UIManager.Instance.ShowPowUpText("Laser Ball");
         GameManagerScript.Instance.Score += (40 * GameManagerScript.Instance.ScoreMulti);
         SoundEffectPlayer.Instance.GrowPad();
         //Track the Stats

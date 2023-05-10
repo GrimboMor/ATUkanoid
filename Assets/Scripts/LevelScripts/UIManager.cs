@@ -36,9 +36,11 @@ public class UIManager : MonoBehaviour
     public GameObject victoryScreen;
     public GameObject livesScore;
     public GameObject multiScore;
-
+    public GameObject fadeInPanel;
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI powUpText;
+    public TextMeshProUGUI powDownText;
     public Text goScoreText;
     public Text goBrickText;
     public Text goStatsText;
@@ -57,8 +59,11 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         UIManager.Instance.livesScore.SetActive(true);
+        UIManager.Instance.fadeInPanel.SetActive(true);
         livesText = GameObject.Find("UI-LivesText").GetComponent<TextMeshProUGUI>();
         scoreText = GameObject.Find("UI-ScoreText").GetComponent<TextMeshProUGUI>();
+        powUpText = GameObject.Find("UI-PowerUp").GetComponent<TextMeshProUGUI>();
+        powDownText = GameObject.Find("UI-PowerDown").GetComponent<TextMeshProUGUI>();
 
         StatCollectPowUps = 0;
         StatCollectPowDown = 0;
@@ -68,6 +73,20 @@ public class UIManager : MonoBehaviour
         StatLivesBonus = 0;
         StatPadResized = 0;
         StatTotalBallBounces = 0;
+    }
+
+    public void ShowPowUpText(string powText)
+    {
+        powUpText.text = powText;
+        Animator animator = powUpText.GetComponent<Animator>();
+        animator.SetTrigger("PowShowTrigger");
+    }
+
+    public void ShowPowDownText(string powText)
+    {
+        powDownText.text = powText;
+        Animator animator = powDownText.GetComponent<Animator>();
+        animator.SetTrigger("PowShowTrigger");
     }
 
     public void UIVictory()
@@ -86,6 +105,8 @@ public class UIManager : MonoBehaviour
         if (isNewHighScore)
         {
             scoreText.text = "NEW HIGH SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+            Animator animator = VicScoreText.GetComponent<Animator>();
+            animator.SetTrigger("NewHighScoreTrigger");
         }
         else
         {
@@ -98,6 +119,7 @@ public class UIManager : MonoBehaviour
         statText.text = " " + StatCollectPowUps + "\n" + StatScorePowUps + "\n" + StatCollectPowDown + "\n" + StatScorePowDown + "\n" + StatPadResized + "\n" + StatTotalBallBounces + "\n" + StatLivesLeft + "\n" + StatLivesBonus;
 
         UpdateHighScore();
+        SoundEffectPlayer.Instance.Victory();
     }
 
     public void UIGameOver()
@@ -110,17 +132,6 @@ public class UIManager : MonoBehaviour
 
         bool isNewHighScore = UpdateHighScore();
 
-        GameObject goScoreText = GameObject.Find("GOScoreText");
-        Text scoreText = goScoreText.GetComponent<Text>();
-        if (isNewHighScore)
-        {
-            scoreText.text = "NEW HIGH SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
-        }
-        else
-        {
-            scoreText.text = "SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
-        }
-
         GameObject goBrickText = GameObject.Find("GOBrickText");
         Text brickText = goBrickText.GetComponent<Text>();
         brickText.text = "BRICKS : " + GameManagerScript.Instance.RemainingBricks + " / " + GameManagerScript.Instance.TotalBricks;
@@ -131,6 +142,21 @@ public class UIManager : MonoBehaviour
         statText.text = " " + StatCollectPowUps + "\n" + StatScorePowUps + "\n" + StatCollectPowDown + "\n" + StatScorePowDown + "\n" + StatPadResized + "\n" + StatTotalBallBounces;
 
         UpdateHighScore();
+        SoundEffectPlayer.Instance.GameOver();
+
+        GameObject goScoreText = GameObject.Find("GOScoreText");
+        Text scoreText = goScoreText.GetComponent<Text>();
+        
+        if (isNewHighScore)
+        {
+            scoreText.text = "NEW HIGH SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+            Animator animator = goScoreText.GetComponent<Animator>();
+            animator.SetTrigger("NewHighScoreTrigger");
+        }
+        else
+        {
+            scoreText.text = "SCORE : " + GameManagerScript.Instance.Score.ToString("D5");
+        }
     }
 
     public void UIValuesUpdate()

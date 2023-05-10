@@ -7,6 +7,7 @@ public class ExplodingBricks : PowerUpBase
 {
     protected override void ApplyPowerUp()
     {
+        UIManager.Instance.ShowPowUpText("Exploding Bricks");
         GameManagerScript.Instance.explodingBricks = true;
         GameManagerScript.Instance.Score += (40 * GameManagerScript.Instance.ScoreMulti);
         SoundEffectPlayer.Instance.GrowPad();

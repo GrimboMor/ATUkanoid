@@ -4,6 +4,8 @@ public class Multiball : PowerUpBase
 {
     protected override void ApplyPowerUp()
     {
+        UIManager.Instance.ShowPowUpText("Multiball");
+
         foreach (BallScript ball in BallsManagerScript.Instance.BallsList.ToList())
         {
             BallsManagerScript.Instance.MultiBalls(ball.gameObject.transform.position, 2,ball.isALaserBall);

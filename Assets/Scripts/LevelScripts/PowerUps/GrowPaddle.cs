@@ -12,6 +12,7 @@ public class GrowPaddle : PowerUpBase
     {
         float currentSize = PaddleScript.Instance.GetPaddleSize();
         int currentIndex = Array.IndexOf(paddleSizes, currentSize);
+        UIManager.Instance.ShowPowUpText("Grow Paddle");
 
         if (currentIndex < paddleSizes.Length - 1)
         {

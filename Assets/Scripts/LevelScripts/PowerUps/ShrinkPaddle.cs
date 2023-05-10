@@ -17,6 +17,7 @@ public class ShrinkPaddle : PowerUpBase
         {
             PaddleScript.Instance.ChangePaddleSizeAnimated(paddleSizes[currentIndex - 1]);
         }
+        UIManager.Instance.ShowPowDownText("Shrink Paddle");
         GameManagerScript.Instance.Score += (300 * GameManagerScript.Instance.ScoreMulti);
         SoundEffectPlayer.Instance.ShrinkPad();
         //Track the Stats

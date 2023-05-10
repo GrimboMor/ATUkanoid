@@ -6,6 +6,7 @@ public class ExtraLife : PowerUpBase
 {
     protected override void ApplyPowerUp()
     {
+        UIManager.Instance.ShowPowUpText("Extra Life");
         GameManagerScript.Instance.Lives = GameManagerScript.Instance.Lives + 1;
         GameManagerScript.Instance.Score = GameManagerScript.Instance.Score + (250* GameManagerScript.Instance.ScoreMulti);
         SoundEffectPlayer.Instance.OneUp();

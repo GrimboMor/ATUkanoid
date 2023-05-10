@@ -7,6 +7,7 @@ public class FogPowDown : PowerUpBase
     protected override void ApplyPowerUp()
     {
         FogScript.Instance.CreateFog();
+        UIManager.Instance.ShowPowDownText("Foggy Fog");
         //Track the Stats
         UIManager.Instance.StatCollectPowDown = UIManager.Instance.StatCollectPowDown + 1;
         UIManager.Instance.StatScorePowDown = UIManager.Instance.StatScorePowDown + (600 * GameManagerScript.Instance.ScoreMulti);

@@ -164,7 +164,10 @@ using UnityEngine.UIElements;
 
         private IEnumerator CreateScreenshotCoroutine()
         {
-            yield return new WaitForEndOfFrame();
+        // Wait for 0.61 seconds for fade-in effect
+        yield return new WaitForSeconds(0.61f);
+        // Take screenshot
+        yield return new WaitForEndOfFrame();
 
             string filePath = Path.Combine(Application.dataPath, "Resources", LevelTextFile + "_Load.png");
             bool pngExists = File.Exists(filePath);

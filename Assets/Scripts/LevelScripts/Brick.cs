@@ -17,7 +17,6 @@ public class Brick : MonoBehaviour
     private int ScoreToAdd = 5;
     private int ScoreHitCount = 0;
 
-
     private void Awake()
     {
         //Get the colour for the brick and particles
@@ -117,29 +116,29 @@ public class Brick : MonoBehaviour
 
     private void BrickExplodes(Brick brick, bool isFirstCall = true)
     {
-        BricksManager.Instance.RemainingBricks.Remove(brick);
-        //spawn particles + destroy brick
-        OnBrickDestroyed?.Invoke(brick);
-        SpawnBrickDestroyed();
-        SpawnBrickExplode(brick);
-        SpawnPowerUp();
-        SoundEffectPlayer.Instance.BrickExplode2();
-        Destroy(brick.gameObject);
-        GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
-        AddScoreToGM(ScoreToAdd, ScoreHitCount);
+            BricksManager.Instance.RemainingBricks.Remove(brick);
+            //spawn particles + destroy brick
+            OnBrickDestroyed?.Invoke(brick);
+            SpawnBrickDestroyed();
+            SpawnBrickExplode(brick);
+            SpawnPowerUp();
+            SoundEffectPlayer.Instance.BrickExplode2();
+            Destroy(brick.gameObject);
+            GameManagerScript.Instance.RemainingBricks = BricksManager.Instance.RemainingBricks.Count;
+            AddScoreToGM(ScoreToAdd, ScoreHitCount);
 
-        if (isFirstCall)
-        {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(brick.transform.position, .3f);
-            foreach (Collider2D collider in colliders)
+            if (isFirstCall)
             {
-                Brick otherBrick = collider.gameObject.GetComponent<Brick>();
-                if (otherBrick != null && otherBrick != brick && UnityEngine.Random.value < .25f)
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(brick.transform.position, .3f);
+                foreach (Collider2D collider in colliders)
                 {
-                    BrickExplodes(otherBrick, false);
+                    Brick otherBrick = collider.gameObject.GetComponent<Brick>();
+                    if (otherBrick != null && otherBrick != brick && UnityEngine.Random.value < .25f)
+                    {
+                        BrickExplodes(otherBrick, false);
+                    }
                 }
             }
-        }
     }
     private void SpawnBrickExplode(Brick brick)
     {
@@ -210,7 +209,7 @@ public class Brick : MonoBehaviour
     {
         float elapsedTime = 0;
         float initialYForce = 1f;
-        float targetYForce = -100f;
+        float targetYForce = -80f;
         float initialGravity = 1f;
         float targetGravity = 1000f;
 

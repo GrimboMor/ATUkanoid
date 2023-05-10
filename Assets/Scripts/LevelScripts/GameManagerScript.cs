@@ -50,7 +50,7 @@ public class GameManagerScript : MonoBehaviour
 
     public bool canInteract = true;
 
-    public Animator fadeInPanelAnimator;
+    //public Animator fadeInPanelAnimator; Moved this to code on the panel not using an animation.
 
     public bool explodingBricks = false;
 
@@ -66,7 +66,7 @@ public class GameManagerScript : MonoBehaviour
         Score = 0;
         ScoreMulti = 4;
         IsGameOver = false;
-        fadeInPanelAnimator.SetTrigger("FadeInPanel");
+        //fadeInPanelAnimator.SetTrigger("FadeInPanel");
     }
     void Update()
     {

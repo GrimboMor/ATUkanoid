@@ -4,12 +4,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
+using System.IO;
 
 public class PauseManager : MonoBehaviour
 {
     public GameObject pauseMenuPanel;
+    public TextMeshProUGUI highScoreText;
     public Button resumeButton;
     public float fadeDuration = 1f;
+    private int currentHighScore;
 
     private bool isPaused = false;
 
@@ -20,6 +24,7 @@ public class PauseManager : MonoBehaviour
     private void Start()
     {
         HidePauseMenu();
+        GetHighScore();
     }
 
     private void Update()
@@ -49,6 +54,8 @@ public class PauseManager : MonoBehaviour
             isPaused = true;
             Time.timeScale = 0;
             pauseMenuPanel.SetActive(true);
+            highScoreText = GameObject.Find("PauseHighScoreTMP").GetComponent<TextMeshProUGUI>();
+            highScoreText.text = "LEVEL HIGHSCORE : " + currentHighScore;
 
         }
     }
@@ -106,5 +113,25 @@ public class PauseManager : MonoBehaviour
         Cursor.visible = true;
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private int GetHighScore()
+    {
+        string levelToLoad = PlayerPrefs.GetString("LevelToLoad");
+        string jsonFilePath = Path.Combine(Application.persistentDataPath, levelToLoad + ".json");
+
+        if (File.Exists(jsonFilePath))
+        {
+            string jsonData = File.ReadAllText(jsonFilePath);
+            LevelData levelData = JsonUtility.FromJson<LevelData>(jsonData);
+            currentHighScore = levelData.HighScore;
+
+        }
+        else
+        {
+            Debug.LogWarning("JSON file not found for level: " + levelToLoad);
+        }
+
+        return currentHighScore;
     }
 }

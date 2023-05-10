@@ -10,7 +10,8 @@ public class SlowMo : PowerUpBase
         BallsManagerScript.Instance.SlowBalls();
         GameManagerScript.Instance.Score = GameManagerScript.Instance.Score + (10 * GameManagerScript.Instance.ScoreMulti);
         SoundEffectPlayer.Instance.OneUp();
-        
+        UIManager.Instance.ShowPowUpText("Slow Ball");
+
         //Track the Stats
         UIManager.Instance.StatCollectPowUps = UIManager.Instance.StatCollectPowUps + 1;
         UIManager.Instance.StatScorePowUps = UIManager.Instance.StatScorePowUps + (10 * GameManagerScript.Instance.ScoreMulti);
