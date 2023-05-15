@@ -150,21 +150,23 @@ public class Brick : MonoBehaviour
 
     private void SpawnPowerUp()
     {
-        float powUpSpawnChance = UnityEngine.Random.Range(0, 100f);
-        float powDownSpawnChance = UnityEngine.Random.Range(0, 100f);
-        bool thisBrickAlreadySpawned = false;
+        float powUpSpawnChance = UnityEngine.Random.Range(0, 65f);
 
-        if (powUpSpawnChance <= PowerUpsManager.Instance.PowUpChance)
+        if (powUpSpawnChance > PowerUpsManager.Instance.PowerUpSpawnCountdown)
         {
-            thisBrickAlreadySpawned = true;
-            PowerUpBase newPowUp = this.SpawnPowerUp(true);
-            AddForceToPowerUp(newPowUp);
-        }
+            System.Random random = new System.Random();
+            double randomNumber = random.NextDouble();
 
-        if (powDownSpawnChance <= PowerUpsManager.Instance.PowDownChance && !thisBrickAlreadySpawned)
-        {
-            PowerUpBase newPowDown = this.SpawnPowerUp(false);
-            AddForceToPowerUp(newPowDown);
+            if (randomNumber < 0.55)
+            {
+                PowerUpBase newPowUp = this.SpawnPowerUp(true);
+                AddForceToPowerUp(newPowUp);
+            }
+            else
+            {
+                PowerUpBase newPowDown = this.SpawnPowerUp(false);
+                AddForceToPowerUp(newPowDown);
+            }
         }
     }
 
@@ -184,6 +186,7 @@ public class Brick : MonoBehaviour
         int powIndex = UnityEngine.Random.Range(0, powType.Count);
         PowerUpBase prefab = powType[powIndex];
         PowerUpBase newPowerUp = Instantiate(prefab, this.transform.position, Quaternion.identity) as PowerUpBase;
+        PowerUpsManager.Instance.PowerUpSpawnCountdown = 100f;
         return newPowerUp;
     }
 

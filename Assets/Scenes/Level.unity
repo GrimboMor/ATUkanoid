@@ -2644,6 +2644,8 @@ MonoBehaviour:
   sfxBallHit: {fileID: 8300000, guid: cbe8325ce417e0148aec921a159e95ff, type: 3}
   sfxExplode: {fileID: 8300000, guid: 0e95cb41590623d458631ac02d42dd75, type: 3}
   sfxBrickExplode: {fileID: 8300000, guid: da3ce9081dbc3f34694d69937ea0e5de, type: 3}
+  sfxPUp: {fileID: 0}
+  sfxPDown: {fileID: 0}
 --- !u!1 &810612085
 GameObject:
   m_ObjectHideFlags: 0
@@ -8061,12 +8063,11 @@ MonoBehaviour:
   - {fileID: 6391166374578170408, guid: 28ca329a04bd66d43963ab25864c3f95, type: 3}
   - {fileID: 252033416267664511, guid: dd1e240fd27c65442bccfbf8d4df36a5, type: 3}
   - {fileID: 4482434272984423238, guid: 5598043c688acd144b8861157c63b52b, type: 3}
+  - {fileID: 6391166374578170408, guid: 28ca329a04bd66d43963ab25864c3f95, type: 3}
   AvailablePowerDowns:
   - {fileID: 4172732461478930318, guid: 540a7e02cc2af8e43886e53d87c46a4d, type: 3}
   - {fileID: 1589966132976574929, guid: 63dd6c18078ad614983a9855b86331dd, type: 3}
   - {fileID: 3232593356039361297, guid: 66f15c47f2cbb9043a9c746861eeae4b, type: 3}
-  PowUpChance: 6
-  PowDownChance: 6
 --- !u!1 &2073170432
 GameObject:
   m_ObjectHideFlags: 0

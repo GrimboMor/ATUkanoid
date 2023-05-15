@@ -12,6 +12,7 @@ public class SoreDivide2 : PowerUpBase
 
         GameManagerScript.Instance.Score = GameManagerScript.Instance.Score + (800 * GameManagerScript.Instance.ScoreMulti);
         UIManager.Instance.ShowPowDownText("Score Divider");
+        SoundEffectPlayer.Instance.PowerDown();
 
         //Then change the score multiplier
         if (GameManagerScript.Instance.ScoreMulti > 1)

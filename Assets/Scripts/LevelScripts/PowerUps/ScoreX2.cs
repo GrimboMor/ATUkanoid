@@ -13,6 +13,7 @@ public class ScoreX2 : PowerUpBase
         GameManagerScript.Instance.Score = GameManagerScript.Instance.Score + (5 * GameManagerScript.Instance.ScoreMulti);
 
         UIManager.Instance.ShowPowUpText("Score Multiplier");
+        SoundEffectPlayer.Instance.PowerUp();
 
         //Then change the score multiplier
         if (GameManagerScript.Instance.ScoreMulti >= 1 && GameManagerScript.Instance.ScoreMulti < 32)

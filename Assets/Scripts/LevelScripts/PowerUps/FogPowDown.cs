@@ -8,6 +8,7 @@ public class FogPowDown : PowerUpBase
     {
         FogScript.Instance.CreateFog();
         UIManager.Instance.ShowPowDownText("Foggy Fog");
+        SoundEffectPlayer.Instance.PowerDown();
         //Track the Stats
         UIManager.Instance.StatCollectPowDown = UIManager.Instance.StatCollectPowDown + 1;
         UIManager.Instance.StatScorePowDown = UIManager.Instance.StatScorePowDown + (600 * GameManagerScript.Instance.ScoreMulti);

@@ -60,17 +60,16 @@ public class GameManagerTest
     [Test]
     public void LifeLost_UpdatesLivesAndEndsGameWhenLivesReachZero()
     {
-        /* Arrange
+        // Arrange
         var gameManager = new GameManagerScript();
-        var initialLives = 3;
-        gameManager.SetLives(initialLives);
-        var expectedLives = initialLives - 1;
+        gameManager.Lives = 3;
+        var expectedLives = 2;
 
         // Act
         gameManager.LifeLost();
 
         // Assert
-        Assert.AreEqual(expectedLives, gameManager.GetLives());
+        Assert.AreEqual(expectedLives, gameManager.Lives);
 
         if (expectedLives == 0)
         {
@@ -79,7 +78,7 @@ public class GameManagerTest
         else
         {
             Assert.IsFalse(gameManager.IsGameOver());
-        }*/
+        }
     }
 
     [Test]

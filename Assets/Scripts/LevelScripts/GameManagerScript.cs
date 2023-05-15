@@ -54,7 +54,6 @@ public class GameManagerScript : MonoBehaviour
 
     public bool explodingBricks = false;
 
-
     public void Start()
     {
         // Setting the starting lives
@@ -106,7 +105,7 @@ public class GameManagerScript : MonoBehaviour
     // Call this to update the score
     public void ChangeScore(int value)
     {
-        this.Score = this.Score+(value * ScoreMulti);
+        this.Score = this.Score + (value * ScoreMulti);
         //Debug.Log("Score changed to: " + Score);
     }
 
