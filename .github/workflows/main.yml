@@ -1,4 +1,4 @@
-name: ATUkanoid Game-CI Tests 🎮
+name: ATUkanoid Game-CI Build and Tests 🎮
 
 on:
   push: { branches: [main] }
