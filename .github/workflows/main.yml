@@ -1,11 +1,11 @@
-name: ATUkanoid Game-CI Build and Tests 🎮
+name: ATUkanoid Game-CI Build and Unit Tests 🎮
 
 on:
   push: { branches: [main] }
 
 jobs:
   buildForWindowsBasedPlatforms:
-    name: Build for ${{ matrix.targetPlatform }}
+    name: Build for Windows 64 🪟 
     runs-on: windows-2019
     strategy:
       fail-fast: false
@@ -45,14 +45,13 @@ jobs:
           name: Build
           path: build
   testRunner:
-    name: Test in ${{ matrix.testMode }} ✨
-    runs-on: ubuntu-latest
+    name: Unit Tests for ATUkanoid 🧱
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:
         testMode:
           - EditMode
-#          - PlayMode
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
