@@ -14,6 +14,8 @@ jobs:
           - 2021.3.19f1
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
+        projectPath:
+          - ./
 
     steps:
       - uses: actions/checkout@v2
@@ -52,16 +54,17 @@ jobs:
       matrix:
         testMode:
           - EditMode
+        projectPath:
+          - ./
     steps:
       - uses: actions/checkout@v2
         with:
           lfs: true
       - uses: actions/cache@v2
         with:
-          path: Library
-          key: Library-test-project-${{ matrix.targetPlatform }}
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}
           restore-keys: |
-            Library-test-project-
             Library-
       - uses: game-ci/unity-test-runner@v2
         id: testRunner
