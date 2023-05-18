@@ -73,11 +73,11 @@ public class GameManagerTest
 
         if (expectedLives == 0)
         {
-            Assert.IsTrue(gameManager.IsGameOver());
+            Assert.IsTrue(gameManager.IsGameOver);
         }
         else
         {
-            Assert.IsFalse(gameManager.IsGameOver());
+            Assert.IsFalse(gameManager.IsGameOver);
         }
     }
 
