@@ -12,7 +12,7 @@ public class GameManagerTest
     [SetUp]
     public void Setup()
     {
-        // Create a new instance of GameManagerScript before each test
+        // Create a new instance of GameManagerScript
         GameObject gameManagerObject = new GameObject();
         gameManager = gameManagerObject.AddComponent<GameManagerScript>();
         gameManager.Start();
@@ -31,13 +31,6 @@ public class GameManagerTest
         Assert.IsFalse(gameManager.IsGameStarted);
         Assert.IsFalse(gameManager.IsGameOver);
         Assert.IsFalse(gameManager.explodingBricks);
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        // Destroy the GameManagerScript instance after each test
-        Object.Destroy(gameManager.gameObject);
     }
 
     [Test]
@@ -105,5 +98,12 @@ public class GameManagerTest
         Assert.AreEqual(initialScore, gameManager.Score, "Score should be reset to initial value after restarting level.");
         Assert.AreEqual(initialLives, gameManager.Lives, "Lives should be reset to initial value after restarting level.");
         Assert.AreEqual("Level", SceneManager.GetActiveScene().name, "Active scene should be reset to Level after restarting level.");
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // Destroy the GameManagerScript instance 
+        Object.Destroy(gameManager.gameObject);
     }
 }
