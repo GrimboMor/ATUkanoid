@@ -96,7 +96,7 @@ public class GameManagerTest
         GameManagerScript gameManager = new GameManagerScript();
         int initialScore = gameManager.Score;
         int initialLives = gameManager.Lives;
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level");
   
         // Act
         gameManager.RestartLevel();
@@ -104,6 +104,6 @@ public class GameManagerTest
         // Assert
         Assert.AreEqual(initialScore, gameManager.Score, "Score should be reset to initial value after restarting level.");
         Assert.AreEqual(initialLives, gameManager.Lives, "Lives should be reset to initial value after restarting level.");
-        Assert.AreEqual("Level1", SceneManager.GetActiveScene().name, "Active scene should be reset to Level1 after restarting level.");
+        Assert.AreEqual("Level", SceneManager.GetActiveScene().name, "Active scene should be reset to Level after restarting level.");
     }
 }
