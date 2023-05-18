@@ -4,37 +4,6 @@ on:
   push: { branches: [main] }
 
 jobs:
-  buildForWindowsBasedPlatforms:
-    name: Build for Windows 64 🪟 
-    runs-on: windows-2019
-    strategy:
-      fail-fast: false
-      matrix:
-        unityVersion:
-          - 2021.3.19f1
-        targetPlatform:
-          - StandaloneWindows64
-        projectPath:
-          - ./
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          lfs: true
-      - uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          projectPath: ${{ matrix.projectPath }}
-          unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: ${{ matrix.targetPlatform }}
-          customParameters: '-myParameter myValue -myBoolean -ThirdParameter andItsValue'
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Build
-          path: build
   testRunner:
     name: Unit Tests for ATUkanoid 🧱
     runs-on: windows-2019
@@ -43,6 +12,7 @@ jobs:
       matrix:
         testMode:
           - EditMode
+          - PlayMode
     steps:
     #Using Personal license
     - uses: game-ci/unity-test-runner@v2
