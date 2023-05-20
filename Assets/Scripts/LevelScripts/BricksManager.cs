@@ -33,7 +33,7 @@ using UnityEngine.UIElements;
 
         // File used for level generation. The colour file will always be the level name with a C at the end of it
         // so I set that as a private variable and update it in the start code block.
-        public string LevelTextFile = "Level_0002";
+        public string LevelTextFile = "Level_0001";
         private string LevelColorTextFile;
         private string LevelSpriteTextFile;
 

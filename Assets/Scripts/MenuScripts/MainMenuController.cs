@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
+using TMPro;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class MainMenuController : MonoBehaviour
     public GameObject BackGround;
     private float fadeTime = 0.25f; 
     private Image backgroundImage;
+    public GameObject aboutPanel;
 
 
     public void ButtonLevelSelect()
@@ -46,6 +48,18 @@ public class MainMenuController : MonoBehaviour
         fullscreenToggle.isOn = PlayerPrefs.GetInt(WindowedPrefKey, 0) == 0;
         backgroundImage = BackGround.GetComponent<Image>();
         StartCoroutine(FadeBackground());
+        HideAboutMenu();    
+    }
+
+    public void ShowAboutMenu()
+    {
+        aboutPanel.SetActive(true);
+
+    }
+
+    public void HideAboutMenu()
+    {
+        aboutPanel.SetActive(false);
     }
 
     private void Update()

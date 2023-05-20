@@ -12,10 +12,10 @@ public class Brick : MonoBehaviour
     public int BrickSprite = 4;
     public ParticleSystem BrickDestroyed;
     public GameObject bickExplodePrefab;
-    private SpriteRenderer SR;
+    public SpriteRenderer SR;
     private BoxCollider2D box2D;
     private int ScoreToAdd = 5;
-    private int ScoreHitCount = 0;
+    public int ScoreHitCount = 0;
 
     private void Awake()
     {
@@ -54,7 +54,7 @@ public class Brick : MonoBehaviour
         ApplyLaserCollisionFunction(ball);
     }
 
-    private void ApplyCollisionFunction(BallScript ball)
+    public void ApplyCollisionFunction(BallScript ball)
     {
         if (GameManagerScript.Instance.explodingBricks && UnityEngine.Random.value < 0.5f)
         {
@@ -84,7 +84,7 @@ public class Brick : MonoBehaviour
         }
     }
 
-    private void ApplyLaserCollisionFunction(BallScript ball)
+    public void ApplyLaserCollisionFunction(BallScript ball)
     {
         if (GameManagerScript.Instance.explodingBricks && UnityEngine.Random.value < 0.5f)
         {
@@ -103,7 +103,7 @@ public class Brick : MonoBehaviour
         AddScoreToGM(ScoreToAdd, 2);
     }
 
-    private void SpawnBrickDestroyed()
+    public void SpawnBrickDestroyed()
     {
         Vector3 BrickPos = gameObject.transform.position;
         Vector3 SpawnPos = new Vector3(BrickPos.x, BrickPos.y, BrickPos.z);
