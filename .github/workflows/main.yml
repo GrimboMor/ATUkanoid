@@ -5,7 +5,7 @@ on:
 
 jobs:
   testActivationConfiguration:
-    name: Test Unity Activation is correctly setup 
+    name: Test Unity Activation is correctly setup 🚥
     runs-on: ubuntu-latest
     steps:
       - name: Unity - Activate
@@ -13,7 +13,7 @@ jobs:
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   testAllModes:
-    name: Test in ${{ matrix.testMode }}
+    name: Test in ${{ matrix.testMode }} 🐛
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -55,7 +55,7 @@ jobs:
           name: Coverage results for ${{ matrix.testMode }}
           path: ${{ steps.tests.outputs.coveragePath }}
   buildForWindowsBasedPlatforms:
-    name: Build for Windows 64 🪟 
+    name: Build for Windows 🪟 and WebGL 👾
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
