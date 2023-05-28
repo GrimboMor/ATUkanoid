@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour
     public Text goStatsText;
     public Text scoreMultiText;
 
-    //Strat tracking!!
+    //Stat tracking!!
     public int StatCollectPowUps { get; set; }
     public int StatCollectPowDown { get; set; }
     public int StatScorePowUps { get; set; } //needed as powerups have different scores
