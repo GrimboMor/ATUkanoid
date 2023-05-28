@@ -52,7 +52,7 @@ public class UIManager : MonoBehaviour
     public int StatScorePowUps { get; set; } //needed as powerups have different scores
     public int StatScorePowDown { get; set; } //needed as powerups have different scores
     public int StatLivesLeft { get; set; } 
-    private int StatLivesBonus { get; set; } 
+    public int StatLivesBonus { get; set; } 
     public int StatPadResized { get; set; }
     public int StatTotalBallBounces { get; set; }
 

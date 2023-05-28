@@ -13,7 +13,7 @@ public class BallScript : MonoBehaviour
     public static event Action<BallScript> OnLaserBallSEnabled;
     public static event Action<BallScript> OnLaserBallSDisabled;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         //Debug.Log("Collision detected with: " + collision.gameObject.tag);
         if (collision.gameObject.CompareTag("Paddle"))
@@ -45,7 +45,7 @@ public class BallScript : MonoBehaviour
         }
     }
 
-    private void CreateSparks()
+    public void CreateSparks()
     {
         Vector3 ballPos = gameObject.transform.position;
         Vector3 spawnPos = new Vector3(ballPos.x, ballPos.y - 0.25f, ballPos.z);

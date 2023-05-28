@@ -32,7 +32,7 @@ public class PaddleScript : MonoBehaviour
     private float paddleYPos;
     private float paddleWidth;
     //Variables used in the checking the paddle size, for variable paddle size power ups
-    private SpriteRenderer spriteRend;
+    public SpriteRenderer spriteRend;
     private BoxCollider2D paddleCollider;
     private Coroutine sizeChangeCoroutine;
     public AudioSource audioSource;

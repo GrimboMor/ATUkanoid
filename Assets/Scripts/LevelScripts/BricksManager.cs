@@ -34,11 +34,11 @@ using UnityEngine.UIElements;
         // File used for level generation. The colour file will always be the level name with a C at the end of it
         // so I set that as a private variable and update it in the start code block.
         public string LevelTextFile = "Level_0001";
-        private string LevelColorTextFile;
-        private string LevelSpriteTextFile;
+        public string LevelColorTextFile;
+        public string LevelSpriteTextFile;
 
-        private int maximumRows = 17;
-        private int maximumColumns = 33;
+        public int maximumRows = 17;
+        public int maximumColumns = 33;
         private GameObject BrickManagerBrickList;
         public float firstBrickX = -7.85f;
         public float firstBrickY = 3.35f;
@@ -76,7 +76,7 @@ using UnityEngine.UIElements;
         //Code to generate the brick layout by passing the level files to LoadBrickLayout and getting a 
         //list of INTs back. First list "currentLevelData" is used for brick placement and brick health
         //second list currentColourData is used for the brick colour data.
-        private void LevelGeneration()
+        public void LevelGeneration()
         {
             this.RemainingBricks = new List<Brick>();
             // This next line is for all levels in one text file loading the current level from a matrix
@@ -120,7 +120,7 @@ using UnityEngine.UIElements;
             GameManagerScript.Instance.RemainingBricks = this.RemainingBricks.Count;
         }
 
-        private List<int[,]> LoadBrickLayout(string TextFile)
+        public List<int[,]> LoadBrickLayout(string TextFile)
         {
             TextAsset text = Resources.Load(TextFile) as TextAsset;
             string[] rows = text.text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -154,7 +154,7 @@ using UnityEngine.UIElements;
         }
 
         // This can be called to quickly remove all the bricks for testing
-        private void EraseBricks()
+        public void EraseBricks()
         {
             foreach (Brick brick in this.RemainingBricks.ToList())
             {

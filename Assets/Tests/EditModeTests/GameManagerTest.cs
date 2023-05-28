@@ -25,7 +25,7 @@ public class GameManagerTest
         // Assert
         int expectedScore = initialScore + (scoreToAdd * scoreMulti);
         int actualScore = gameManager.Score;
-        Assert.AreEqual(expectedScore, actualScore, "The score was not updated correctly.");
+        Assert.AreEqual(expectedScore, actualScore, "The score was updated correctly.");
     }
 
     [Test]
